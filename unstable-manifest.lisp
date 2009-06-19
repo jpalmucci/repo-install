@@ -96,11 +96,13 @@
 
 (make-instance 
  'cliki-repo
- :name :trivial-gray-streams)
+ :name :trivial-gray-streams
+ :strip-components 1)
 
 (make-instance 
  'cliki-repo
- :name :cl-base64)
+ :name :cl-base64
+ :strip-components 1)
 
 (make-instance
  'cvs-repo
@@ -166,11 +168,13 @@
 
 (make-instance 
  'cliki-repo
- :name :rfc2388)
+ :name :rfc2388
+ :strip-components 1)
 
 (make-instance 
  'cliki-repo
- :name :md5)
+ :name :md5
+ :strip-components 1)
 
 (make-instance
  'darcs-repo

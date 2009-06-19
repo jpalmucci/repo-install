@@ -81,7 +81,11 @@
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .bzr" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p tarball-backed-bzr-repo))
-  (safe-shell-command t "cd ~a ; bzr status" (working-dir p)))
+  (let ((result (safe-shell-command t "cd ~a ; bzr status" (working-dir p))))
+    (cond ((equalp result "")
+	   nil)
+	  (t
+	   result))))
 
 (defun replace-bzr-contents (bzr-working-dir tarball &optional (tar-options ""))
   "replace the contents of the bzr working directory with the tarball and commit any changes"
@@ -123,8 +127,14 @@
 				     (if strip-components
 					 (format nil "--strip-components ~d" strip-components)))
 	       ;; merge upstream changes to local branch
-	       (safe-shell-command nil "cd ~a/local ; bzr merge " dir-path)
-	       'new-tarball))))))
+	       (safe-shell-command nil "cd ~a ; bzr merge " (working-dir p))
+	       'new-tarball))
+	;; if the default .bzrignore file is not there, add it
+	(let ((bzrpath  (make-pathname :name ".bzrignore" :defaults (working-dir p))))
+	  (cond ((null (probe-file bzrpath))
+		 (with-open-file (s bzrpath :direction :output)
+		   (format s "*.fasl~&*~~~&"))
+		 (safe-shell-command nil "cd ~a ; bzr add ~a ; bzr commit -m \"repo-install added default .bzrignore to ingnore binary files\"" (working-dir p) bzrpath))))))))
 
 (defclass cliki-repo (tarball-backed-bzr-repo)
   ()
@@ -149,7 +159,11 @@
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v _darcs" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p darcs-repo))
-  (safe-shell-command t "cd ~a ; darcs whatsnew" (working-dir p)))
+  (let ((result (safe-shell-command t "cd ~a ; darcs whatsnew" (working-dir p))))
+    (cond ((search "No changes!" result)
+	   nil)
+	  (t
+	   result))))
 
 (defmethod update-database ((p darcs-repo))
   "update the local database from the cache."
@@ -176,7 +190,10 @@
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .git" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p git-repo))
-  (safe-shell-command t "cd ~a ; git status" (working-dir p)))
+  (let ((result (safe-shell-command t "cd ~a ; git status" (working-dir p))))
+    (cond ((search "nothing to commit (working directory clean)" result)
+	   nil)
+	  (t result))))
 
 (defmethod update-database ((p git-repo))
   (test-environment :git)
@@ -202,7 +219,11 @@
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .svn" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p svn-package))
-  (safe-shell-command t "cd ~a ; svn status" (working-dir p)))
+  (let ((result (safe-shell-command nil "cd ~a ; svn status" (working-dir p))))
+    (cond ((equalp result "")
+	   nil)
+	  (t
+	   result))))
 
 (defmethod update-database ((p svn-package))
   (test-environment :svn)
@@ -229,7 +250,11 @@
 	  (safe-shell-command nil "find ~a -name ~a.asd" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p cvs-repo))
-  (safe-shell-command t "cd ~a ; cvs foo" (working-dir p)))
+  (let ((result (safe-shell-command t "cd ~a ; cvs diff --brief" (working-dir p))))
+    (cond ((search "differ" result)
+	   result)
+	  (t 
+	   nil))))
 
 (defmethod update-database ((p cvs-repo))
   (let* ((dir (database-dir p)))
@@ -253,11 +278,21 @@
 (defun update-all-packages ()
   (loop for package in (all-packages)
        do
-       (print (update-database package))))
+       (cond ((probe-file (working-dir package))
+	      (print (update-database package))))))
 
 (defun repo-status ()
   (loop for package in (all-packages)
        do
-       (print (name package))
-       (print (native-status package))))
+       (let ((status (and (probe-file (working-dir package))
+			  (native-status package))))
+       (cond ((not (null status))
+	      (princ "--------------------------------------------------------------------------------")
+	      (terpri)
+	      (princ (name package))
+	      (terpri)
+	      (princ "--------------------------------------------------------------------------------")
+	      (terpri)
+	      (princ status)
+	      (terpri))))))
   
