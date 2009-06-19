@@ -1,0 +1,8 @@
+(defun get-manifest ()
+  (cond ((null *manifest*)
+	 (destructuring-bind (response header stream)
+	    (shttp:http-get "http://www.machineinsight.com/ldist/manifest.lisp")
+	  (if (not (eq response 200))
+	      (error "Couldn't read manifest."))
+	  (setq *manifest* (read stream)))))
+  *manifest*)
