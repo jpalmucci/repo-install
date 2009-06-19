@@ -1,12 +1,12 @@
 (in-package :asdf)
 
-(defpackage repo-installer
+(defpackage repo-install
   (:nicknames ri)
   (:use :cl)
   (:export #:install #:update-all-packages #:repo-status)
 )
 
-(asdf:defsystem repo-installer
+(asdf:defsystem repo-install
   :depends-on (trivial-http)
   :components ((:file "utilities")
 	       (:file "vars")

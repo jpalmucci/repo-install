@@ -1,11 +1,10 @@
 
-(load (merge-pathnames (make-pathname :directory '(:relative "asdf") :name "asdf")
+(load (merge-pathnames (make-pathname :directory '(:relative ".." "asdf") :name "asdf")
 		       *load-truename*))
 
-(pushnew (merge-pathnames (make-pathname :directory '(:relative "systems"))
-		       *load-truename*) asdf:*central-registry*)
+(pushnew (make-pathname :directory (append (butlast (pathname-directory *load-truename*)) '("systems")))
+	 asdf:*central-registry*)
 
-(asdf:load-system :repo-installer)
+(asdf:load-system :repo-install)
 
-(load (merge-pathnames (make-pathname :directory '(:relative "repo-installer") :name "unstable-manifest")
-		       *load-truename*))
+(load (merge-pathnames (make-pathname :name "unstable-manifest") *load-truename*))
