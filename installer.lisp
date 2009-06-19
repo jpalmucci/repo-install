@@ -217,26 +217,26 @@
 	     'pulled)))))
 
 
-(defclass cvs-package (base-repo)
+(defclass cvs-repo (base-repo)
   ((cvsroot :initarg :cvsroot)
-   (project :initarg :project))
+   (module :initarg :module))
   )
 
-(defmethod asd-file ((p cvs-package) &optional (package-name nil))
+(defmethod asd-file ((p cvs-repo) &optional (package-name nil))
   (with-slots (name) p
     (car (split-sequence:split-sequence 
 	  #\newline 
 	  (safe-shell-command nil "find ~a -name ~a.asd" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
-(defmethod native-status ((p cvs-package))
+(defmethod native-status ((p cvs-repo))
   (safe-shell-command t "cd ~a ; cvs foo" (working-dir p)))
 
-(defmethod update-database ((p cvs-package))
+(defmethod update-database ((p cvs-repo))
   (let* ((dir (database-dir p)))
-    (with-slots (cvsroot project) p
+    (with-slots (cvsroot module) p
       (cond ((not (probe-file dir))
 	     (makedirs dir)
-	     (safe-shell-command nil "cd ~a ; cvs -z3 -d ~a co ~a" *installer-directory* cvsroot project)
+	     (safe-shell-command nil "cd ~a ; cvs -z3 -d ~a co ~a" *installer-directory* cvsroot module)
 	     'new-package)
 	    (t
 	     (safe-shell-command nil "cd ~a ; cvs update" dir)

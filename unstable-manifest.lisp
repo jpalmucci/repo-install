@@ -1,5 +1,7 @@
 (in-package :ri)
 
+;; This manifest contains references to the newest versions of the libraries that are available.
+
 (make-instance
  'cliki-repo
  :name :xmls
@@ -101,7 +103,7 @@
  :name :cl-base64)
 
 (make-instance
- 'cvs-package
+ 'cvs-repo
  :name :cl+ssl
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plus-ssl/cvsroot"
  :project "cl+ssl")
@@ -146,5 +148,32 @@
  :name :metabang-bind
  :url "http://common-lisp.net/project/metabang-bind")
 
+(make-instance
+ 'darcs-repo
+ :name :hunchentoot
+ :url "http://common-lisp.net/~loliveira/ediware/hunchentoot")
 
+(make-instance
+ 'darcs-repo
+ :name :bordeaux-threads
+ :url "http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads")
+
+(make-instance 
+ 'cvs-repo
+ :name :rfc2822
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/rfc2822/cvsroot"
+ :module "rfc2822")
+
+(make-instance 
+ 'cliki-repo
+ :name :rfc2388)
+
+(make-instance 
+ 'cliki-repo
+ :name :md5)
+
+(make-instance
+ 'darcs-repo
+ :name :cl-ppcre
+ :url "http://common-lisp.net/~loliveira/ediware/cl-ppcre")
 
