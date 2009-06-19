@@ -116,8 +116,7 @@
 				(format nil "--strip-components ~d" strip-components) ""))
 	       (safe-shell-command nil "ln -s -f `find ~alocal -name '*.asd'` ~asystems" dir *installer-directory*)
 	       'new-package)
-	      ((equalp (excl:file-contents tarball-path)
-		       (excl:file-contents (format nil "~a/tarballs/~d" (database-dir p) (car prev-tarballs))))
+	      ((not (files-different tarball-path (format nil "~a/tarballs/~d" (database-dir p) (car prev-tarballs))))
 	       ;; no change in the tarball, leave it alone
 	       (delete-file tarball-path)
 	       'no-change)

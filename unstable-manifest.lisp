@@ -181,3 +181,22 @@
  :name :cl-ppcre
  :url "http://common-lisp.net/~loliveira/ediware/cl-ppcre")
 
+(make-instance
+ 'darcs-repo
+ :name :cl-containers
+ :url "http://common-lisp.net/project/cl-containers")
+
+(make-instance
+ 'darcs-repo
+ :name :metatilities-base
+ :url "http://common-lisp.net/project/metatilities-base")
+
+(make-instance
+ 'darcs-repo
+ :name :metatilities
+ :url "http://common-lisp.net/project/metatilities")
+
+(make-instance
+ 'darcs-repo
+ :name :asdf-binary-locations
+ :url "http://common-lisp.net/project/asdf-binary-locations")

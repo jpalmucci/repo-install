@@ -9,21 +9,37 @@
 
     <h1>Repo-install: An ASDF-install replacement geared towards collaboration</h1>
 
-    Repo-install is a common lisp package manager that can be used to chase down and download dependencies between common lisp packages. Unlike other package managers (asdf-install, mudballs), repo-install
-    maintains the connection between source code on your disk, and the upstream repository.
+    Repo-install is a common lisp package manager that can be used to
+    chase down and download dependencies between common lisp
+    packages. Unlike other package managers (asdf-install, mudballs),
+    repo-install maintains the connection between source code on your
+    disk, and the upstream repository.
 
-    <p> In cases where the upstream package is stored in a distributed revision control system, the local files are stored in the same DVC system as a clone.
-    <p> When the upstream package is not a DVC, repo-install will create a local DVC repository with the non-DVC distribution system (tarballs, cvs, or svn), as input to the local repository.
+    <p> In cases where the upstream package is stored in a distributed
+    revision control system, the local files are stored in the same
+    DVC system as a clone.
+
+    <p> When the upstream package is not a DVC, repo-install will
+    create a local DVC repository with the non-DVC distribution system
+    (tarballs, cvs, or svn), as input to the local repository.
 
     <p>There are two primary advantages to this: 
       <ul>
-	<li>Changes you make to your local copy of the package remain in place (ie are rebased) even when you update to a newer version of the package.
-	<li>It is much easier to submit patches to the upstream maintainer. For DVC, it is also much easier for the upstream maintainer to integrate your patches.
+	<li>Changes you make to your local copy of the package remain
+	in place (ie are rebased) even when you update to a newer
+	version of the package.
+	<li>It is much easier to submit patches to the upstream
+	maintainer. For DVC, it is also much easier for the upstream
+	maintainer to integrate your patches.
       </ul>
 
-    <p>Both of these capabilities are particularly important when working on common-lisp. Several very useful packages are maintained on a part-time or hobbyist attention level. You may need to maintain your local patches for weeks to ... forever if the upstream maintainer doesn't have the cycles to integrate them sooner.
+    <p>Both of these capabilities are particularly important when
+    working on common-lisp. Several very useful packages are
+    maintained on a less than full time basis. You may need to
+    maintain your local patches for weeks to forever if the upstream
+    maintainer doesn't have the cycles to integrate them sooner.
 
-    <p>different lisp environments
+    <p>Common lisp different lisp environments
 
     <p>Experienced / motivated users.
 
