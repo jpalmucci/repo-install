@@ -5,8 +5,6 @@
   </head>
   <body>
 
-    <h1>NOTE! Repo install is not functional yet. It'll be a couple of days</h1>
-
     <h1>Repo-install: An ASDF-install replacement geared towards collaboration</h1>
 
     Repo-install is a common lisp package manager that can be used to
@@ -15,9 +13,9 @@
     repo-install maintains the connection between source code on your
     disk, and the upstream repository.
 
-    <p> In cases where the upstream package is stored in a distributed
-    revision control system, the local files are stored in the same
-    DVC system as a clone.
+    <p> In cases where the upstream package is stored using
+    distributed version control (DVC), the local files are stored in
+    the same DVC system as a clone.
 
     <p> When the upstream package is not a DVC, repo-install will
     create a local DVC repository with the non-DVC distribution system
@@ -34,30 +32,47 @@
       </ul>
 
     <p>Both of these capabilities are particularly important when
-    working on common-lisp. Several very useful packages are
-    maintained on a less than full time basis. You may need to
-    maintain your local patches for weeks to forever if the upstream
+    working on common lisp. Several very useful common lisp packages
+    are maintained on a less than full time basis. You may need to
+    maintain your local patches for weeks or forever if the upstream
     maintainer doesn't have the cycles to integrate them sooner.
 
-    <p>Common lisp different lisp environments
+    <p>Unlike Perl, Python, and Ruby, common lisp does not have a
+    reference implementation. Downstream users can submit valuable
+    patches for different lisp environments, especially environments
+    that are not easily available to a package maintainer.
 
-    <p>Experienced / motivated users.
-
-      Repo-install's goal is to simplify collaboration between the users and the maintainers of lisp packages
+    <p>Finally, common-lisp users tend to be very technical. With such
+    an experienced user base, downstream patches should turn out to be
+    more valuable than not.
 
       
       <h2>Installing</h2>
 
-      Repo-install is bootstrapped using a tarball that can be found at <a href="foo">http://www.machineinsight.com/repo-install/repo-install-bootstrap.tgz</a>. Uninstall to a convienient location and add the following to your lisp initialization file.
+      Repo-install is bootstrapped using a tarball that can be found
+      <a href="http://www.machineinsight.com/repo-install/repo-install-bootstrap.tgz">
+	http://www.machineinsight.com/repo-install/repo-install-bootstrap.tgz</a>.
+      The tarball contains the minimum set of packages needed to get
+      repo-install working. The bootstrap packages (like all
+      repo-install packages) are actually software
+      repositories. Patches to these systems (including repo-install)
+      can be submitted according to conventions for the given system.
+
+      <p>Uninstall to a convienient location and add the following to
+      your lisp initialization file.
 
     <p>
-      <pre>
-(load "<i>&lt;location where you unzipped the bootstrap tarball&gt;</i>/boot.lisp")
-      </pre>
+      <pre>(load "<i>&lt;location where you unzipped the bootstrap tarball&gt;</i>/boot.lisp")</pre>
 
-    <p>You will also need have <a href="Git">Git</a>, <a href="bzr">Bazaar</a>, <a href="svn">Subversion</a>, and <a href="darcs">Darcs</a> installed on your system.
+    <p>Repo-install takes the philosophy that the correct version
+    control system to use is the one the upstream package maintainer
+    is using. Therefore, you will
+    need <a href="http://git-scm.com/">Git</a>, <a href="http://bazaar-vcs.org/">Bazaar</a>, <a href="http://subversion.tigris.org/">Subversion</a>,
+    and <a href="http://darcs.net/">Darcs</a> installed on your
+    system. Using <a href="http://www.macports.org/">MacPorts</a> on OSX, do this:
 
-    <p>The tarball contains the minimum set of packages needed to get repo-install working. The bootstrap packages (like all repo-install packages) are actually software repositories. Patches to these systems (including repo-install) can be submitted according to conventions for the given system.
+      <pre>sudo port install git-core bzr subversion darcs</pre>
+
       
       <h2>Exported Functions</h2>
     <p><em>(ri:install <i>package</i>)</em>
