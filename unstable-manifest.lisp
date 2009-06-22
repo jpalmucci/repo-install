@@ -7,6 +7,10 @@
  :name :xmls
  :strip-components 1)
 
+(make-instance
+ 'git-repo
+ :name :repo-install
+ :url "git://github.com/jpalmucci/repo-install.git")
 
 ;; this work word as a repo because there is no asd file
 #+ignore
@@ -33,7 +37,7 @@
 )
 
 (make-instance
- 'svn-package
+ 'svn-repo
  :name :usocket
  :url "svn://common-lisp.net/project/usocket/svn/usocket/trunk")
 

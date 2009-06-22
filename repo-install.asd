@@ -3,7 +3,7 @@
 (defpackage repo-install
   (:nicknames ri)
   (:use :cl)
-  (:export #:install #:update-all-packages #:repo-status)
+  (:export #:install #:update-all-packages #:repo-status #:all-local-repo-changes)
 )
 
 (asdf:defsystem repo-install

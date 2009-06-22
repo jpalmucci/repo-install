@@ -89,9 +89,8 @@ standard error)"
 
 		 #-(or openmcl clisp lispworks allegro scl cmu sbcl ecl)
 		 (error "SAFE-SHELL-COMMAND not implemented for this Lisp")
-		 )))
-       (if (and (not ignore-errors)
-		(not (eql result 0)))
-	   (error "command '~a' returned error code ~a ~& ~a" command result (get-output-stream-string output-stream)))
-       )
+		 ))
+	 (if (and (not ignore-errors)
+		  (not (eql result 0)))
+	     (error "command '~a' returned error code ~a ~& ~a" command result (get-output-stream-string output-stream)))))
      result)))
