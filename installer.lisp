@@ -125,21 +125,23 @@
 	    (prev-tarballs (sort (mapcar #'(lambda (x) (parse-integer (pathname-name x))) (directory (merge-pathnames "tarballs/" (database-dir p)))) #'>)))
 	(shttp:http-download url tarball-path)
 	(cond ((eql (length prev-tarballs) 0)
-	       ;; first time we grabbed a tarball, build the local repository
-	       (makedirs upstream)
-	       (concatenate
-		'string 
-		(safe-shell-command nil "cd ~a ; tar xvf ~a ~a ; bzr init"
-				    upstream tarball-path
-				    (if strip-components
-					(format nil "--strip-components ~d" strip-components) ""))
+	       ;; make sure that we don't leave around a partially created repo
+	       (delete-dir-on-error dir
+		 ;; first time we grabbed a tarball, build the local repository
+		 (makedirs upstream)
+		 (concatenate
+		  'string 
+		  (safe-shell-command nil "cd ~a ; tar xvf ~a ~a ; bzr init"
+				      upstream tarball-path
+				      (if strip-components
+					  (format nil "--strip-components ~d" strip-components) ""))
 	 
-		 ;; if the default .bzrignore file is not there, add it
-		 (let ((bzrpath  (make-pathname :name ".bzrignore" :defaults (upstream-dir p))))
-		   (cond ((null (probe-file bzrpath))
-			  (with-open-file (s bzrpath :direction :output)
-			    (format s "*.fasl~&*~~~&"))))
-		   (safe-shell-command nil "cd ~a ; bzr add . ; bzr commit -m 'initial tarball' ; cd .. ; bzr branch upstream local " (upstream-dir p)))))
+		  ;; if the default .bzrignore file is not there, add it
+		  (let ((bzrpath  (make-pathname :name ".bzrignore" :defaults (upstream-dir p))))
+		    (cond ((null (probe-file bzrpath))
+			   (with-open-file (s bzrpath :direction :output)
+			     (format s "*.fasl~&*~~~&"))))
+		    (safe-shell-command nil "cd ~a ; bzr add . ; bzr commit -m 'initial tarball' ; cd .. ; bzr branch upstream local " (upstream-dir p))))))
 	      ((not (files-different tarball-path (format nil "~a/tarballs/~d" (database-dir p) (car prev-tarballs))))
 	       ;; no change in the tarball, leave it alone
 	       (delete-file tarball-path)
@@ -196,7 +198,9 @@
     (with-slots (url) p
       (cond ((not (probe-file dir))
 	     ;; darcs repo is not there yet, get it
-	     (safe-shell-command nil "darcs get ~a ~a" url dir))
+	     ;; make sure that we don't leave around a partially created repo
+	     (delete-dir-on-error dir
+	       (safe-shell-command nil "darcs get ~a ~a" url dir)))
 	    (t
 	     (safe-shell-command nil "cd ~a ; darcs pull" dir))))))
 
@@ -227,9 +231,11 @@
   (let* ((dir (database-dir p)))
     (with-slots (url release) p
       (cond ((not (probe-file (make-pathname :name ".git" :defaults dir)))
-	     (makedirs dir)
-	     ;; darcs repo is not there yet, get it
-	     (safe-shell-command nil"git clone ~a ~a" url dir))
+	     ;; make sure that we don't leave around a partially created repo
+	     (delete-dir-on-error dir
+	       (makedirs dir)
+	       ;; darcs repo is not there yet, get it
+	       (safe-shell-command nil"git clone ~a ~a" url dir)))
 	    (t
 	     (safe-shell-command nil "cd ~a ; git pull" dir))))))
 
@@ -251,16 +257,17 @@
 	   result))))
 
 (defmethod local-repo-changes ((p svn-repo))
-  (let ((result (safe-shell-command nil "cd ~a ; svn status" (working-dir p))))
-    result))
+  (native-status p))
 
 (defmethod update-repo ((p svn-repo))
   (test-environment :svn)
   (let* ((dir (database-dir p)))
     (with-slots (url) p
       (cond ((not (probe-file dir))
-	     (makedirs dir)
-	     (safe-shell-command nil "svn co ~a ~a" url dir))
+	     ;; make sure that we don't leave around a partially created repo
+	     (delete-dir-on-error dir
+	       (makedirs dir)
+	       (safe-shell-command nil "svn co ~a ~a" url dir)))
 	    (t
 	     (safe-shell-command nil "cd ~a ; svn update" dir))))))
 
@@ -283,12 +290,17 @@
 	  (t 
 	   nil))))
 
+(defmethod local-repo-changes ((p cvs-repo))
+  (native-status p))
+
 (defmethod update-repo ((p cvs-repo))
   (let* ((dir (database-dir p)))
     (with-slots (cvsroot module) p
       (cond ((not (probe-file dir))
-	     (makedirs dir)
-	     (safe-shell-command nil "cd ~a ; cvs -z3 -d ~a co ~a" *installer-directory* cvsroot module))
+	     ;; make sure that we don't leave around a partially created repo
+	     (delete-dir-on-error dir
+	       (makedirs dir)
+	       (safe-shell-command nil "cd ~a ; cvs -z3 -d ~a co ~a" *installer-directory* cvsroot module)))
 	    (t
 	     (safe-shell-command nil "cd ~a ; cvs update" dir))))))
 

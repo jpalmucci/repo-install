@@ -21,6 +21,14 @@
       (safe-shell-command t "diff --brief ~a ~a" a b)
     (not (eql code 0))))
 
+(defmacro delete-dir-on-error (dir &body body)
+  `(handler-case
+       (progn ,@body)
+     (error (e)
+       (cl-fad:delete-directory-and-files ,dir :if-does-not-exist :ignore)
+       (signal e))))
+     
+
 ;; shamelessly copied from asdf
 (defun safe-shell-command (ignore-errors control-string &rest args)
   "Interpolate `args` into `control-string` as if by `format`, and

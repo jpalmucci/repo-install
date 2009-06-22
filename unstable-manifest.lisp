@@ -112,7 +112,7 @@
  'cvs-repo
  :name :cl+ssl
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plus-ssl/cvsroot"
- :project "cl+ssl")
+ :module "cl+ssl")
 
 (make-instance
  'git-repo
