@@ -200,3 +200,9 @@
  'darcs-repo
  :name :asdf-binary-locations
  :url "http://common-lisp.net/project/asdf-binary-locations")
+
+(make-instance
+ 'darcs-repo
+ :name :cl-store
+ :url "http://common-lisp.net/project/cl-store/darcs/cl-store")
+
