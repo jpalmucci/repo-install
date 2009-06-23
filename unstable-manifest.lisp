@@ -210,3 +210,15 @@
  :name :cl-store
  :url "http://common-lisp.net/project/cl-store/darcs/cl-store")
 
+(make-instance
+ 'svn-repo
+ :name :cl-lex
+ :url "http://cl-lex.googlecode.com/svn/trunk/")
+
+(make-instance
+ 'cliki-repo
+ :name :fare-csv)
+
+(make-instance
+ 'cliki-repo
+ :name :parse-number)
