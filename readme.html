@@ -136,12 +136,23 @@
       <li><b>(ri:find-repo <i>package</i>)</b><p>
 	  Find the repository with the given name.
       </p></li>
-      <li><b>(ri:update-repo <i>package</i>)</b><p> Download any
+      <li><b>(ri:update-repo <i>repo</i>)</b><p> Download any
 	  changes from the upstream repository. For distributed
 	  version control systems, this is equivalent to a pull. 
 	  <p>Non-distributed version control systems perform an update. Repo-install The strategy 
       </p></li>
-      <li><b>(ri:update-all-repos <i>package</i>)</b><p>
+      <li><b>(ri:update-all-repos)</b><p>
+	  Update all repos that have ever been downloaded on this machine.
+      </p></li>
+      <li><b>(ri:repos-status <i>repo</i>)</b><p> Return a string
+	  describing any changes made to the local working directory
+	  that are not yet checked in. If repo-install
+	  can <em>reliably</em> detect that no changes have been made,
+	  return nil.
+      </p></li>
+      <li><b>(ri:all-repos-status)</b><p> Run repo-status on all
+	  locally installed libraries. Print out descriptions of
+	  packages that have uncommitted changes.
       </p></li>
     </ul>
 

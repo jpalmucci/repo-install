@@ -7,9 +7,9 @@
    #:install
    #:find-repo
    #:update-repo
-   #:update-all-packages 
+   #:update-all-repos
    #:repo-status
-   #:all-local-repo-changes
+   #:all-repo-status
    #:*current-manifest*)
 )
 

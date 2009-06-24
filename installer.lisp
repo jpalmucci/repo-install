@@ -121,7 +121,7 @@ and try again."
   "replace the contents of the bzr working directory with the tarball and commit any changes"
   (loop for file in (directory bzr-working-dir)
        when (not (equal (pathname-name file) ".bzr"))
-     do (delete-directory-and-files file))
+     do (cl-fad:delete-directory-and-files file))
   (safe-shell-command nil (format nil "cd ~a ; tar xzf ~a ~a ; bzr commit -m 'new tarball received'" bzr-working-dir tar-options tarball))
   )
   
@@ -337,7 +337,7 @@ and try again."
   (princ msg)
   (terpri))
 
-(defun update-all-packages ()
+(defun update-all-repos ()
   "Grab the most recent changes from the upstream repositories."
   (loop for package in (all-packages)
        do
@@ -354,7 +354,7 @@ directory, but have not yet been committed to the local repository."
        (cond ((not (null status))
 	      (dump-message package status))))))
 
-(defun all-local-repo-changes ()
+(defun all-repo-status ()
   "For all repositories, print changes that have been made to the working 
 directory, but have not yet been committed to the local repository."
   (loop for package in (all-packages)
