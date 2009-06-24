@@ -17,6 +17,11 @@
 	  
 
 (defun install (package)
+  "Install the given package, possibly downloading it and any
+dependencies found in its asdf system definition. If a particular
+dependency is not found in the manifest, *current-manifest*, signal an
+error. In this case, you'll have to add the package to the manifest
+and try again."
   (handler-case
       (asdf:operate 'asdf:load-op package)
     (asdf:missing-component (c)
@@ -57,6 +62,7 @@
   (database-dir p))
 
 (defun find-repo (name)
+  "Find the repository with the given name."
   (gethash (intern (string-upcase name) :keyword) *all-packages* nil))
 
 (defmethod update-repo :around ((p base-repo))
@@ -71,9 +77,16 @@
 
 (defclass tarball-backed-bzr-repo (base-repo)
   ((url :initarg :url
-	:documentation "the url for the gzipped tar file")
+	:documentation "The url from which to grab the gzipped tar file.")
    (strip-components :initarg :strip-components :initform nil
-		     :documentation "Used to strip leading directories off the files"))
+		     :documentation "Used to strip leading directories
+		     off the files. This is necessary when the tarball
+		     includes a top-level directory that contains a
+		     version string. The reason we want to strip this
+		     top level name is so that the local bzr
+		     repository can match up the old and new versions
+		     of the files"))
+  (:documentation "Upstream is a set of tarballs. Local patches are maintained in a bzr repository.")
 )
 
 (defmethod working-dir ((p tarball-backed-bzr-repo))

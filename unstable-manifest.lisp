@@ -1,5 +1,7 @@
 (in-package :ri)
 
+(defparameter *current-manifest* *load-truename*)
+
 ;; This manifest contains references to the newest versions of the libraries that are available.
 
 (make-instance

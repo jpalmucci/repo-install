@@ -7,7 +7,10 @@
    #:install
    #:find-repo
    #:update-repo
-   #:update-all-packages #:repo-status #:all-local-repo-changes)
+   #:update-all-packages 
+   #:repo-status
+   #:all-local-repo-changes
+   #:*current-manifest*)
 )
 
 (asdf:defsystem repo-install
