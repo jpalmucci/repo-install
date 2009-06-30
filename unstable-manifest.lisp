@@ -182,10 +182,16 @@
  :name :md5
  :strip-components 1)
 
+;; forward declare the test package
+(defpackage cl-ppcre-test)
 (make-instance
  'darcs-repo
  :name :cl-ppcre
- :url "http://common-lisp.net/~loliveira/ediware/cl-ppcre")
+ :additional-packages '(:cl-ppcre-test)
+ :url "http://common-lisp.net/~loliveira/ediware/cl-ppcre"
+ :tester #'(lambda ()
+	     (asdf:load-system :cl-ppcre-test)
+	     (cl-ppcre-test::test)))
 
 (make-instance
  'darcs-repo

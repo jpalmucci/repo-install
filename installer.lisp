@@ -36,11 +36,19 @@ and try again."
 
 (defclass base-repo ()
   ((name :initarg :name :reader name)
-   (additional-packages :initarg :additional-packages :initform nil))
+   (additional-packages :initarg :additional-packages :initform nil)
+   (tester :initarg :tester :initform nil 
+	   :documentation "A funcallable object that will test the library. Returns true on success."))
   
   (:documentation "Base class for any distribution package")
   )
 
+(defmethod test-package ((r base-repo))
+  (with-slots (tester name) r
+    (cond ((not (null tester))
+	   (if (not (funcall tester))
+	       (error "test failed for package ~a" name))))))
+	  
 (defmethod print-object ((o base-repo) stream)
   (print-unreadable-object (o stream :type t :identity t)
     (ignore-errors
@@ -67,12 +75,13 @@ and try again."
 
 (defmethod update-repo :around ((p base-repo))
   (let ((result (call-next-method p)))
-    (with-slots (name additional-packages) p
-      (loop for package in (cons name additional-packages)
-	 do
-	 (safe-shell-command nil "ln -sf ~a ~asystems/~a.asd" 
-			     (asd-file p package)
-			     *installer-directory* (string-downcase package))))
+    (cond (result
+	   (with-slots (name additional-packages) p
+	     (loop for package in (cons name additional-packages)
+		do
+		  (safe-shell-command nil "ln -sf ~a ~asystems/~a.asd" 
+				      (asd-file p package)
+				      *installer-directory* (string-downcase package))))))
     result))
 
 (defclass tarball-backed-bzr-repo (base-repo)
@@ -158,7 +167,7 @@ and try again."
 	      ((not (files-different tarball-path (format nil "~a/tarballs/~d" (database-dir p) (car prev-tarballs))))
 	       ;; no change in the tarball, leave it alone
 	       (delete-file tarball-path)
-	       "no new tarball")
+	       nil)
 	      (t
 	       ;; new tarball. update the upstream branch
 	       (replace-bzr-contents upstream tarball-path
@@ -215,7 +224,10 @@ and try again."
 	     (delete-dir-on-error dir
 	       (safe-shell-command nil "darcs get ~a ~a" url dir)))
 	    (t
-	     (safe-shell-command nil "cd ~a ; darcs pull" dir))))))
+	     (let ((result (safe-shell-command nil "cd ~a ; darcs pull -a" dir)))
+	       (cond ((search "No remote changes to pull in!" result)
+		      nil)
+		     (t result))))))))
 
 (defclass git-repo (base-repo)
   ((url :initarg :url))
@@ -250,7 +262,10 @@ and try again."
 	       ;; darcs repo is not there yet, get it
 	       (safe-shell-command nil"git clone ~a ~a" url dir)))
 	    (t
-	     (safe-shell-command nil "cd ~a ; git pull" dir))))))
+	     (let ((result (safe-shell-command nil "cd ~a ; git pull" dir)))
+	       (cond ((search "Already up-to-date." result)
+		      nil)
+		     (t result))))))))
 
 (defclass svn-repo (base-repo)
   ((url :initarg :url))
@@ -282,7 +297,10 @@ and try again."
 	       (makedirs dir)
 	       (safe-shell-command nil "svn co ~a ~a" url dir)))
 	    (t
-	     (safe-shell-command nil "cd ~a ; svn update" dir))))))
+	     (let ((result (safe-shell-command nil "cd ~a ; svn update" dir)))
+	       (cond ((search "At revision" result)
+		      nil)
+		     (t result))))))))
 
 
 (defclass cvs-repo (base-repo)
@@ -342,7 +360,9 @@ and try again."
   (loop for package in (all-packages)
        do
        (cond ((probe-file (working-dir package))
-	      (dump-message package (update-repo package))))))
+	      (let ((message (update-repo package)))
+		(if message
+		    (dump-message package message)))))))
 
 (defun repo-status ()
   "For all repositories, print changes that have been made to the working 
