@@ -268,9 +268,9 @@ and try again."
 	     (cl-fad:delete-directory-and-files dir :if-does-not-exist :ignore)
 	     ;; make sure that we don't leave around a partially created repo
 	     (delete-dir-on-error dir
-	       (makedirs dir)
 	       ;; darcs repo is not there yet, get it
-	       (safe-shell-command nil"git clone ~a ~a" url dir)))
+	       (safe-shell-command nil"git clone ~a ~a" url 
+				   (string-right-trim "/" (format nil "~A" (working-dir (ri:find-repo :cxml)))))))
 	    (t
 	     (let ((result (safe-shell-command nil "cd ~a ; git pull" dir)))
 	       (cond ((search "Already up-to-date." result)
