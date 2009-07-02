@@ -230,3 +230,15 @@
 (make-instance
  'cliki-repo
  :name :parse-number)
+
+(make-instance
+ 'git-repo
+ :name :cxml
+ :url "git://repo.or.cz/cxml.git")
+
+(make-instance
+ 'git-repo
+ :name :closure-common
+ :url "git://repo.or.cz/closure-common.git")
+
+
