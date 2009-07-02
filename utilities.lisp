@@ -26,7 +26,7 @@
        (progn ,@body)
      (error (e)
        (cl-fad:delete-directory-and-files ,dir :if-does-not-exist :ignore)
-       (signal e))))
+       (error e))))
      
 
 ;; shamelessly copied from asdf

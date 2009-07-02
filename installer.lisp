@@ -3,19 +3,26 @@
 (defun test-environment (repo-type)
   (ecase repo-type 
     (:git
-	  (if (null *git-location*)
-	      (error "git executable not found, required to get the package source")))
+     (multiple-value-bind (result code)
+	 (safe-shell-command t "which git")
+       (if (not (eql code 0))
+	   (error "git executable not found, required to get the package source"))))
     (:darcs
-     (if (null *darcs-location*)
-	 (error "darcs executable not found, required to get the package source")))
+     (multiple-value-bind (result code)
+	 (safe-shell-command t "which darcs")
+       (if (not (eql code 0))
+	   (error "darcs executable not found, required to get the package source"))))
     (:svn
-     (if (null *svn-location*)
-	 (error "svn executable not found, required to get the package source")))
+     (multiple-value-bind (result code)
+	 (safe-shell-command t "which svn")
+       (if (not (eql code 0))
+	   (error "svn executable not found, required to get the package source"))))
     (:bzr
-     (if (null *bzr-location*)
-	 (error "bzr executable not found, required to get the package source")))))
+     (multiple-value-bind (result code)
+	 (safe-shell-command t "which bzr")
+       (if (not (eql code 0))
+	   (error "bzr executable not found, required to get the package source"))))))
 	  
-
 (defun install (package &key (force nil))
   "Install the given package, possibly downloading it and any
 dependencies found in its asdf system definition. If a particular
@@ -258,11 +265,12 @@ and try again."
   (let* ((dir (database-dir p)))
     (with-slots (url release) p
       (cond ((not (probe-file (make-pathname :name ".git" :defaults dir)))
+	     (cl-fad:delete-directory-and-files dir :if-does-not-exist :ignore)
 	     ;; make sure that we don't leave around a partially created repo
 	     (delete-dir-on-error dir
-	       (makedirs dir)
 	       ;; darcs repo is not there yet, get it
-	       (safe-shell-command nil"git clone ~a ~a" url dir)))
+	       (safe-shell-command nil"git clone ~a ~a" url 
+				   (string-right-trim "/" (format nil "~A" (working-dir (ri:find-repo :cxml)))))))
 	    (t
 	     (let ((result (safe-shell-command nil "cd ~a ; git pull" dir)))
 	       (cond ((search "Already up-to-date." result)
