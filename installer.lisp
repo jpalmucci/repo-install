@@ -265,6 +265,7 @@ and try again."
   (let* ((dir (database-dir p)))
     (with-slots (url release) p
       (cond ((not (probe-file (make-pathname :name ".git" :defaults dir)))
+	     (cl-fad:delete-directory-and-files dir :if-does-not-exist :ignore)
 	     ;; make sure that we don't leave around a partially created repo
 	     (delete-dir-on-error dir
 	       (makedirs dir)
