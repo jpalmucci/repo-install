@@ -270,7 +270,7 @@ and try again."
 	     (delete-dir-on-error dir
 	       ;; darcs repo is not there yet, get it
 	       (safe-shell-command nil"git clone ~a ~a" url 
-				   (string-right-trim "/" (format nil "~A" (working-dir (ri:find-repo :cxml)))))))
+				   (string-right-trim "/" (format nil "~A" dir)))))
 	    (t
 	     (let ((result (safe-shell-command nil "cd ~a ; git pull" dir)))
 	       (cond ((search "Already up-to-date." result)
