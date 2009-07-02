@@ -16,12 +16,14 @@
 	 (error "bzr executable not found, required to get the package source")))))
 	  
 
-(defun install (package)
+(defun install (package &key (force nil))
   "Install the given package, possibly downloading it and any
 dependencies found in its asdf system definition. If a particular
 dependency is not found in the manifest, *current-manifest*, signal an
 error. In this case, you'll have to add the package to the manifest
 and try again."
+  (if force 
+      (update-repo (find-repo package)))
   (handler-case
       (asdf:operate 'asdf:load-op package)
     (asdf:missing-component (c)
