@@ -2,6 +2,8 @@
 
 (defparameter *current-manifest* *load-truename*)
 
+(flush-repos)
+
 ;; This manifest contains references to the newest versions of the libraries that are available.
 
 (make-instance
@@ -67,7 +69,16 @@
  'darcs-repo
  :name :alexandria
  :url "http://common-lisp.net/project/alexandria/darcs/alexandria"
+ :additional-packages '(:alexandria-tests)
+ :tester #'(lambda ()
+	     (ri:install  :alexandria-tests)
+	     (parse-rt-results #'(lambda ()
+				   (asdf:oos 'asdf:test-op :alexandria-tests))))
 )
+
+(make-instance 
+ 'cliki-repo
+ :name :rt)
 
 (make-instance
  'darcs-repo
@@ -167,12 +178,6 @@
  :url "http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads")
 
 (make-instance 
- 'cvs-repo
- :name :rfc2822
- :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/rfc2822/cvsroot"
- :module "rfc2822")
-
-(make-instance 
  'cliki-repo
  :name :rfc2388
  :strip-components 1)
@@ -189,7 +194,10 @@
  :name :cl-ppcre
  :additional-packages '(:cl-ppcre-test)
  :url "http://common-lisp.net/~loliveira/ediware/cl-ppcre"
- :tester #'(lambda ()
+ #+ignore
+ :tester 
+ #+ignore
+ #'(lambda ()
 	     (asdf:load-system :cl-ppcre-test)
 	     (cl-ppcre-test::test)))
 
@@ -242,3 +250,22 @@
  :url "git://repo.or.cz/closure-common.git")
 
 
+(make-instance 
+ 'darcs-repo
+ :name :asdf-system-connections
+ :url "http://common-lisp.net/project/asdf-system-connections")
+
+(make-instance
+ 'darcs-repo
+ :name :moptilities
+ :url "http://common-lisp.net/project/moptilities")
+
+(make-instance 
+ 'darcs-repo
+ :name :closer-mop
+ :url "http://common-lisp.net/project/closer/repos/closer-mop")
+
+(make-instance 
+ 'darcs-repo
+ :name :trivial-garbage
+ :url "http://common-lisp.net/~loliveira/darcs/trivial-garbage")

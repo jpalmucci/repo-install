@@ -52,12 +52,6 @@ and try again."
   (:documentation "Base class for any distribution package")
   )
 
-(defmethod test-package ((r base-repo))
-  (with-slots (tester name) r
-    (cond ((not (null tester))
-	   (if (not (funcall tester))
-	       (error "test failed for package ~a" name))))))
-	  
 (defmethod print-object ((o base-repo) stream)
   (print-unreadable-object (o stream :type t :identity t)
     (ignore-errors
@@ -84,13 +78,12 @@ and try again."
 
 (defmethod update-repo :around ((p base-repo))
   (let ((result (call-next-method p)))
-    (cond (result
-	   (with-slots (name additional-packages) p
-	     (loop for package in (cons name additional-packages)
-		do
-		  (safe-shell-command nil "ln -sf ~a ~asystems/~a.asd" 
-				      (asd-file p package)
-				      *installer-directory* (string-downcase package))))))
+    (with-slots (name additional-packages) p
+      (loop for package in (cons name additional-packages)
+	 do
+	 (safe-shell-command nil "ln -sf ~a ~asystems/~a.asd" 
+			     (asd-file p package)
+			     *installer-directory* (string-downcase package))))
     result))
 
 (defclass tarball-backed-bzr-repo (base-repo)

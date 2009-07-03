@@ -7,6 +7,7 @@
    #:install
    #:find-repo
    #:update-repo
+   #:test-all-repos
    #:update-all-repos
    #:repo-status
    #:all-repo-status
@@ -14,7 +15,7 @@
 )
 
 (asdf:defsystem repo-install
-  :depends-on (trivial-http cl-fad)
+  :depends-on (trivial-http cl-fad cl-ppcre)
   :components ((:file "utilities")
 	       (:file "vars")
 	       (:file "installer"))
