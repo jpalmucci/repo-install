@@ -63,6 +63,11 @@
  'darcs-repo
  :name :babel
  :url "http://common-lisp.net/project/babel/darcs/babel"
+ :additional-packages '(:babel-tests)
+ :tester #'(lambda ()
+	     (ri:install :babel-tests)
+	     (parse-stefil-results #'(lambda ()
+				   (asdf:oos 'asdf:test-op :babel-tests))))
 )
 
 (make-instance
@@ -175,7 +180,13 @@
 (make-instance
  'darcs-repo
  :name :bordeaux-threads
- :url "http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads")
+ :url "http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads"
+ :tester #'(lambda ()
+	     (load (make-pathname :directory `(,@(butlast (pathname-directory *current-manifest*)) "bordeaux-threads")
+		   :name "bordeaux-threads-test"
+		   :type "lisp"))
+	     (return-lift-results
+	      (lift:run-tests :suite (lift:find-testsuite "TEST-BORDEAUX-THREADS")))))
 
 (make-instance 
  'cliki-repo
@@ -269,3 +280,8 @@
  'darcs-repo
  :name :trivial-garbage
  :url "http://common-lisp.net/~loliveira/darcs/trivial-garbage")
+
+(make-instance 
+ 'darcs-repo
+ :name :stefil
+ :url "http://common-lisp.net/project/stefil/darcs/stefil")

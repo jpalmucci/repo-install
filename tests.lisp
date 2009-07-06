@@ -25,7 +25,7 @@
 	      (return-from test-package result))))
 	;; then test it if it has a test case
 	(cond ((not (null tester))
-	       (multiple-value-bind (output failures tests)
+	       (multiple-value-bind (output tests failures)
 		   (funcall tester)
 		 (setf nfailed failures)
 		 (setf ntests tests)
@@ -51,6 +51,23 @@ directory, but have not yet been committed to the local repository."
       (funcall fn))
     (multiple-value-bind (match submatch)
 	(cl-ppcre:scan-to-strings (cl-ppcre:create-scanner "([0-9]+) out of ([0-9]+) total tests failed") (get-output-stream-string *standard-output*))
-      (values output
+      (values (get-output-stream-string *standard-output*)
 	      (parse-integer (aref submatch 0)) 
 	      (parse-integer (aref submatch 1))))))
+
+(defun parse-stefil-results (fn)
+  (let ((*standard-output* (make-string-output-stream)))
+    (ignore-errors
+      (funcall fn))
+    (multiple-value-bind (match submatch)
+	(cl-ppcre:scan-to-strings (cl-ppcre:create-scanner 
+				   "([0-9]+) tests, [0-9]+ assertions, ([0-9]+) failures")
+				  (get-output-stream-string *standard-output*))
+      (values (get-output-stream-string *standard-output*)
+	      (parse-integer (aref submatch 0)) 
+	      (parse-integer (aref submatch 1))))))
+
+(defun return-lift-results (r)
+  (values ""
+	  nil
+	  (length (lift::failures r))))
