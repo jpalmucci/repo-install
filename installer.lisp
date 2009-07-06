@@ -110,9 +110,9 @@ and try again."
 
 (defmethod asd-file ((p tarball-backed-bzr-repo) &optional (package-name nil))
   (with-slots (name) p
-    (car (split-sequence:split-sequence 
-	  #\newline 
-	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .bzr" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
+    (car 
+     (cl-ppcre:split "\\n" 
+		     (safe-shell-command nil "find ~a -name ~a.asd | grep -v .bzr" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p tarball-backed-bzr-repo))
   (let ((result (safe-shell-command t "cd ~a ; bzr status" (working-dir p))))
@@ -184,11 +184,7 @@ and try again."
 
 (defmethod initialize-instance :after ((p cliki-repo) &key &allow-other-keys)
   (with-slots (name url) p
-    (destructuring-bind (code headers stream resolved-url)
-	(shttp:http-resolve (concatenate 'string "http://www.cliki.net/" (string-downcase name) "?DOWNLOAD"))
-      (setf url resolved-url)
-      (if stream
-	  (close stream)))))
+    (setf url (concatenate 'string "http://www.cliki.net/" (string-downcase name) "?DOWNLOAD"))))
 
 (defclass darcs-repo (base-repo)
   ((url :initarg :url))
@@ -196,8 +192,8 @@ and try again."
 
 (defmethod asd-file ((p darcs-repo) &optional (package-name nil))
   (with-slots (name) p
-    (car (split-sequence:split-sequence 
-	  #\newline 
+    (car (cl-ppcre:split 
+	  "\\n" 
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v _darcs" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p darcs-repo))
@@ -237,8 +233,8 @@ and try again."
 
 (defmethod asd-file ((p git-repo) &optional (package-name nil)) 
   (with-slots (name) p
-    (car (split-sequence:split-sequence 
-	  #\newline 
+    (car (cl-ppcre:split 
+	  "\\n"
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .git" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p git-repo))
@@ -276,8 +272,8 @@ and try again."
 
 (defmethod asd-file ((p svn-repo) &optional (package-name nil))
   (with-slots (name) p
-    (car (split-sequence:split-sequence 
-	  #\newline 
+    (car (cl-ppcre:split 
+	  "\\n"
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .svn" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p svn-repo))
@@ -313,8 +309,8 @@ and try again."
 
 (defmethod asd-file ((p cvs-repo) &optional (package-name nil))
   (with-slots (name) p
-    (car (split-sequence:split-sequence 
-	  #\newline 
+    (car (cl-ppcre:split 
+	  "\\n"
 	  (safe-shell-command nil "find ~a -name ~a.asd" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod native-status ((p cvs-repo))

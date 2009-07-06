@@ -4,6 +4,11 @@
 
 (flush-repos)
 
+;; forward declare some packages that we need to reference below, but that may not be loaded yet
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (if (not (find-package :lift))
+      (defpackage lift)))
+
 ;; This manifest contains references to the newest versions of the libraries that are available.
 
 (make-instance
@@ -186,7 +191,7 @@
 		   :name "bordeaux-threads-test"
 		   :type "lisp"))
 	     (return-lift-results
-	      (lift:run-tests :suite (lift:find-testsuite "TEST-BORDEAUX-THREADS")))))
+	      (lift::run-tests :suite (lift::find-testsuite "TEST-BORDEAUX-THREADS")))))
 
 (make-instance 
  'cliki-repo
