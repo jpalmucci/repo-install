@@ -36,7 +36,7 @@ and try again."
     (asdf:missing-component (c)
       (let ((repo (find-repo (asdf::missing-requires c))))
 	(cond ((null repo)
-	       (error "Don't know how to get the ~a package.~&Please add the missing package to the manifest." (asdf::missing-requires c))))
+	       (error "Don't know how to get the ~a package.~&Please add the missing package to the manifest ~A." (asdf::missing-requires c) *current-manifest*)))
 	(format t "Downloading package ~A~%"
 		(asdf::missing-requires c))
 	(update-repo repo)

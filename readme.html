@@ -24,8 +24,8 @@
     <p>There are two primary advantages to this: 
       <ul>
 	<li>Changes you make to your local copy of the package remain
-	  in place (i.e. are rebased) even when you update to a newer
-	  version of the package.</li>
+	  in place even when you update to a newer version of the
+	  package.</li>
 	<li>It is much easier to submit patches to the upstream
 	  maintainer. For DVC, it is also much easier for the upstream
 	  maintainer to integrate your patches.</li>
@@ -35,7 +35,7 @@
       working on common lisp. Several very useful common lisp packages
       are maintained on a less than full time basis. You may need to
       maintain your local patches for weeks or forever if the upstream
-      maintainer doesn't have the cycles to integrate them sooner.</p>
+      maintainer doesn't have the time to integrate them sooner.</p>
 
     <p>Unlike Perl, Python, and Ruby, common lisp does not have a
       reference implementation. Downstream users can submit valuable
@@ -46,6 +46,15 @@
       an experienced user base, downstream patches should turn out to be
       more valuable than not.</p>
 
+    <h2>Why not clbuild?</h2>
+    <p> <a href="http://common-lisp.net/project/clbuild">Clbuild</a>
+      is another common lisp package manager that works with
+      downstream repositories as opposed to tarballs. I decided not to
+      use it because it was missing some functionality I needed
+      (ri:all-repo-status, ri:all-repo-local-changes and TODOs below).
+      I'm finding that this functionality is much easier to implement
+      in Common Lisp.
+    </p>
     
     <h2>Installing</h2>
 
@@ -85,9 +94,8 @@
     repo-install supports darcs and git. (bzr support is planned) In
     these cases, we maintain our local changes in the local repository
     and use the <em>pull</em> command to grab upstream
-    patches. Patches can be submitted to the upstream repository
-    appropriate technique for the given repository type ("darcs send"
-    or "git format-patch").</p>
+    patches. Patches can be submitted to the upstream repository using
+    appropriate technique ("darcs send" or "git format-patch").</p>
 
     <p>Upstream tarballs are downloaded and stored in a bzr repository
     named "upstream" in the library's repo-installer directory. An
@@ -111,10 +119,11 @@
     that we call the manifest. Currently, there is only one manifest
     that ships with repo-install, unstable-manifest.lisp. This
     manifest can be used to download the most recent publicly
-      available library versions.</p>
+    available library versions.</p>
+
     <p>A manifest is simply a set of make-instance expressions that
     create CLOS objects. We currently have CLOS objects that represent
-      the following upstream repositories:</p>
+    the following upstream repositories:</p>
 
       <table rules="all" border="1">
 	<tr><th>CLOS Class</th><th>Description</th></tr>
@@ -125,7 +134,10 @@
 	<tr><td>svn-repo</td><td>Upstream is a SVN repository.</td></tr>
 	<tr><td>cvs-repo</td><td>Upstream is a CVS repository.</td></tr>
       </table>
+
     <p>You can look in unstable-manifest.lisp for examples of each of these classes.</p>
+
+    <p>Feel free to add any packages that you may need to this file and submit a patch.</p>
       
     
     <h2>Exported Functions</h2>
@@ -152,7 +164,7 @@
 	  can <em>reliably</em> detect that no changes have been made,
 	  return nil.
       </p></li>
-      <li><b>(ri:all-repos-status)</b><p> Run repo-status on all
+      <li><b>(ri:all-repo-status)</b><p> Run repo-status on all
 	  locally installed libraries. Print out descriptions of
 	  packages that have uncommitted changes.
       </p></li>
@@ -168,6 +180,9 @@
       </p></li>
     </ul>
 
+    <h2>Patches and Issues</h2>
+    <p> Please use the <a href="http://github.com/jpalmucci/repo-install">repo-install github page</a> to submit issues and patches. </p>
+
     <h2>To Do</h2>
     Ordered by priority.
     <ul>
@@ -176,8 +191,6 @@
       <li>Code to automatically submit patches.</li>
       <li>Able to specify a tag or a branch on the upstream repository</li>
       <li>Make it easy to publish your local patches to others.</li>
-      <li>Change tarball backed repositories to git</li>
-      <li>Test git rebase</li>
     </ul> 
   </body>
 </html>
