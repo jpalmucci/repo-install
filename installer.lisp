@@ -114,7 +114,7 @@ and try again."
      (cl-ppcre:split "\\n" 
 		     (safe-shell-command nil "find ~a -name ~a.asd | grep -v .bzr" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
-(defmethod native-status ((p tarball-backed-bzr-repo))
+(defmethod repo-status ((p tarball-backed-bzr-repo))
   (let ((result (safe-shell-command t "cd ~a ; bzr status" (working-dir p))))
     (cond ((equalp result "")
 	   nil)
@@ -196,7 +196,7 @@ and try again."
 	  "\\n" 
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v _darcs" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
-(defmethod native-status ((p darcs-repo))
+(defmethod repo-status ((p darcs-repo))
   (let ((result (safe-shell-command t "cd ~a ; darcs whatsnew" (working-dir p))))
     (cond ((search "No changes!" result)
 	   nil)
@@ -237,7 +237,7 @@ and try again."
 	  "\\n"
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .git" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
-(defmethod native-status ((p git-repo))
+(defmethod repo-status ((p git-repo))
   (let ((result (safe-shell-command t "cd ~a ; git status" (working-dir p))))
     (cond ((search "nothing to commit (working directory clean)" result)
 	   nil)
@@ -276,7 +276,7 @@ and try again."
 	  "\\n"
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .svn" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
-(defmethod native-status ((p svn-repo))
+(defmethod repo-status ((p svn-repo))
   (let ((result (safe-shell-command nil "cd ~a ; svn status" (working-dir p))))
     (cond ((equalp result "")
 	   nil)
@@ -284,7 +284,7 @@ and try again."
 	   result))))
 
 (defmethod local-repo-changes ((p svn-repo))
-  (native-status p))
+  (repo-status p))
 
 (defmethod update-repo ((p svn-repo))
   (test-environment :svn)
@@ -313,7 +313,7 @@ and try again."
 	  "\\n"
 	  (safe-shell-command nil "find ~a -name ~a.asd" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
-(defmethod native-status ((p cvs-repo))
+(defmethod repo-status ((p cvs-repo))
   (let ((result (safe-shell-command t "cd ~a ; cvs diff --brief" (working-dir p))))
     (cond ((search "differ" result)
 	   result)
@@ -321,7 +321,7 @@ and try again."
 	   nil))))
 
 (defmethod local-repo-changes ((p cvs-repo))
-  (native-status p))
+  (repo-status p))
 
 (defmethod update-repo ((p cvs-repo))
   (let* ((dir (database-dir p)))
@@ -347,7 +347,7 @@ and try again."
 (defun dump-message (package msg)
   (princ "--------------------------------------------------------------------------------")
   (terpri)
-  (princ (name package))
+  (format t "~A - ~A" (name package) (class-of package))
   (terpri)
   (princ "--------------------------------------------------------------------------------")
   (terpri)
@@ -363,19 +363,19 @@ and try again."
 		(if message
 		    (dump-message package message)))))))
 
-(defun repo-status ()
+(defun all-repo-status ()
   "For all repositories, print changes that have been made to the working 
 directory, but have not yet been committed to the local repository."
   (loop for package in (all-packages)
        do
        (let ((status (and (probe-file (working-dir package))
-			  (native-status package))))
+			  (repo-status package))))
        (cond ((not (null status))
 	      (dump-message package status))))))
 
-(defun all-repo-status ()
-  "For all repositories, print changes that have been made to the working 
-directory, but have not yet been committed to the local repository."
+(defun all-local-repo-changes ()
+  "For all repositories, print changes that have been committed to the local
+repository, but have not yet been committed upstream"
   (loop for package in (all-packages)
        do
        (let ((status (and (probe-file (working-dir package))

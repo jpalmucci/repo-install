@@ -156,6 +156,16 @@
 	  locally installed libraries. Print out descriptions of
 	  packages that have uncommitted changes.
       </p></li>
+      <li><b>(ri:local-repo-changes <i>repo</i>)</b><p> Return a
+	  string describing any changes made to the local repository
+	  that are not yet checked in to the upstream repository. If
+	  repo-install can <em>reliably</em> detect that no changes
+	  have been made, return nil.
+      </p></li>
+      <li><b>(ri:all-local-repo-changes)</b><p> Run local-repo-changes
+	  on all locally installed libraries. Print out descriptions
+	  of packages that have uncommitted changes.
+      </p></li>
     </ul>
 
     <h2>To Do</h2>

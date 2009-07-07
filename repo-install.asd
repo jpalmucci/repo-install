@@ -11,6 +11,8 @@
    #:update-all-repos
    #:repo-status
    #:all-repo-status
+   #:local-repo-changes
+   #:all-local-repo-changes
    #:*current-manifest*)
 )
 
