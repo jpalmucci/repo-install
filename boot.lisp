@@ -7,4 +7,4 @@
 
 (asdf:load-system :repo-install)
 
-(load (merge-pathnames (make-pathname :name "unstable-manifest") *load-truename*))
+(load (merge-pathnames (make-pathname :name "most-recent-manifest") *load-truename*))

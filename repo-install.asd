@@ -20,5 +20,6 @@
   :depends-on (trivial-http cl-fad cl-ppcre)
   :components ((:file "utilities")
 	       (:file "vars")
-	       (:file "installer"))
+	       (:file "installer")
+	       (:static-file "most-recent-manifest.lisp"))
   :serial t)
