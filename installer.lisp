@@ -7,6 +7,11 @@
 	 (safe-shell-command t "which git")
        (if (not (eql code 0))
 	   (error "git executable not found, required to get the package source"))))
+    (:mercurial
+     (multiple-value-bind (result code)
+	 (safe-shell-command t "which hg")
+       (if (not (eql code 0))
+	   (error "hg (mercurial) executable not found, required to get the package source"))))
     (:darcs
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which darcs")
@@ -266,6 +271,49 @@ and try again."
 		      nil)
 		     (t result))))))))
 
+;; ********************************************************************************
+
+(defclass mercurial-repo (base-repo)
+  ((url :initarg :url))
+  )
+
+(defmethod asd-file ((p mercurial-repo) &optional (package-name nil)) 
+  (with-slots (name) p
+    (car (cl-ppcre:split 
+	  "\\n"
+	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .hg" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
+
+(defmethod repo-status ((p mercurial-repo))
+  (let ((result (safe-shell-command t "cd ~a ; hg status" (working-dir p))))
+    (cond ((search "nothing to commit (working directory clean)" result)
+	   nil)
+	  (t result))))
+
+(defmethod local-repo-changes ((p mercurial-repo))
+  (let ((result (safe-shell-command nil "cd ~a ; hg outgoing" (working-dir p))))
+    (cond ((search "no changes found" result)
+	   nil)
+	  (t result))))
+
+(defmethod update-repo ((p mercurial-repo))
+  (test-environment :mercurial)
+  (let* ((dir (database-dir p)))
+    (with-slots (url release) p
+      (cond ((not (probe-file (make-pathname :name ".hg" :defaults dir)))
+	     (cl-fad:delete-directory-and-files dir :if-does-not-exist :ignore)
+	     ;; make sure that we don't leave around a partially created repo
+	     (delete-dir-on-error dir
+	       ;; repo is not there yet, get it
+	       (safe-shell-command nil "hg clone ~a ~a" url 
+				   (string-right-trim "/" (format nil "~A" dir)))))
+	    (t
+	     (let ((result (safe-shell-command nil "cd ~a ; hg pull" dir)))
+	       (cond ((search "no changes found" result)
+		      nil)
+		     (t result))))))))
+
+;; ********************************************************************************
+
 (defclass svn-repo (base-repo)
   ((url :initarg :url))
   )
@@ -330,9 +378,9 @@ and try again."
 	     ;; make sure that we don't leave around a partially created repo
 	     (delete-dir-on-error dir
 	       (makedirs dir)
-	       (safe-shell-command nil "cd ~a ; cvs -z3 -d ~a co ~a" *installer-directory* cvsroot module)))
+	       (safe-shell-command nil "cd ~a ; cvs -z3 -d ~a co ~a" dir cvsroot module)))
 	    (t
-	     (safe-shell-command nil "cd ~a ; cvs update" dir))))))
+	     (safe-shell-command nil "cd ~a/~a ; cvs update" dir module))))))
 
 
 (defun all-packages ()

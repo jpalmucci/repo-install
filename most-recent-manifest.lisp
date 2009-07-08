@@ -290,3 +290,53 @@
  'darcs-repo
  :name :stefil
  :url "http://common-lisp.net/project/stefil/darcs/stefil")
+
+(make-instance
+ 'svn-repo
+ :name :html-entities
+ :url "http://html-entities.googlecode.com/svn/trunk")
+
+(make-instance
+ 'mercurial-repo
+ :name :weblocks
+ :url "http://bitbucket.org/skypher/weblocks-stable"
+)
+
+(make-instance
+ 'darcs-repo
+ :name :f-underscore
+ :url "http://common-lisp.net/project/bpm/darcs/f-underscore")
+
+(make-instance
+ 'cvs-repo
+ :name :anaphora
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/anaphora/cvsroot"
+ :module "src")
+
+(make-instance
+ 'git-repo
+ :name :parenscript
+ :url "http://common-lisp.net/project/parenscript/git/parenscript")
+
+(make-instance
+ 'darcs-repo
+ :name :cl-cont
+ :url "http://common-lisp.net/project/cl-cont/darcs/cl-cont")
+
+(make-instance
+ 'cliki-repo
+ :name :fare-matcher)
+
+(make-instance
+ 'cliki-repo
+ :name :fare-utils)
+
+(make-instance 
+ 'darcs-repo
+ :name :cl-json
+ :url "http://common-lisp.net/project/cl-json/darcs/cl-json")
+
+(make-instance 
+ 'darcs-repo
+ :name :cl-who
+ :url "http://common-lisp.net/~loliveira/ediware/cl-who")

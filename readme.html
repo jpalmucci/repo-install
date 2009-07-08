@@ -78,12 +78,14 @@
       control system to use is the one the upstream package maintainer
       is using. Therefore, you will
       need <a href="http://git-scm.com/">Git</a>, <a href="http://bazaar-vcs.org/">Bazaar</a>, <a href="http://subversion.tigris.org/">Subversion</a>,
+      <a href="http://mercurial.selenic.com/wiki/">Mercurial</a>,
       and <a href="http://darcs.net/">Darcs</a> installed on your
-      system. Using <a href="http://www.macports.org/">MacPorts</a> on OSX, do this:
+      system. Using <a href="http://www.macports.org/">MacPorts</a> on
+      OSX, do this:
 
-      <pre>sudo port install git-core bzr subversion darcs</pre></p>
+      <pre>sudo port install git-core bzr subversion darcs mercurial</pre></p>
     <p>Under debian, do:
-      <pre>sudo apt-get install git-core bzr subversion darcs</pre></p>
+      <pre>sudo apt-get install git-core bzr subversion darcs mercurial</pre></p>
 
     <h2>How repo-install handles different upstream repositories</h2>
 
@@ -133,6 +135,7 @@
 	<tr><td>git-repo</td><td>Upstream is a Git repository.</td></tr>
 	<tr><td>svn-repo</td><td>Upstream is a SVN repository.</td></tr>
 	<tr><td>cvs-repo</td><td>Upstream is a CVS repository.</td></tr>
+	<tr><td>mercurial-repo</td><td>Upstream is a Mercurial repository.</td></tr>
       </table>
 
     <p>You can look in most-recent-manifest.lisp for examples of each of these classes.</p>
