@@ -6,27 +6,27 @@
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which git")
        (if (not (eql code 0))
-	   (error "git executable not found, required to get the package source"))))
+	   (error "git executable not found. Please install the Git version control system and try again."))))
     (:mercurial
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which hg")
        (if (not (eql code 0))
-	   (error "hg (mercurial) executable not found, required to get the package source"))))
+	   (error "hg (mercurial) executable not found. Please install the Mercurial version control system and try again."))))
     (:darcs
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which darcs")
        (if (not (eql code 0))
-	   (error "darcs executable not found, required to get the package source"))))
+	   (error "darcs executable not found. Please install the Darcs version control system and try again."))))
     (:svn
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which svn")
        (if (not (eql code 0))
-	   (error "svn executable not found, required to get the package source"))))
+	   (error "svn executable not found. Please install the Subversion version control system and try again."))))
     (:bzr
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which bzr")
        (if (not (eql code 0))
-	   (error "bzr executable not found, required to get the package source"))))))
+	   (error "bzr executable not found. Please install the Bazaar version control system and try again."))))))
 	  
 (defun install (package &key (force nil))
   "Install the given package, possibly downloading it and any
