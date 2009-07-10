@@ -340,3 +340,41 @@
  'darcs-repo
  :name :cl-who
  :url "http://common-lisp.net/~loliveira/ediware/cl-who")
+
+(make-instance 
+ 'darcs-repo
+ :name :postmodern
+ :additional-packages '(:s-sql :cl-postgres)
+ :url "http://common-lisp.net/project/postmodern/darcs/postmodern")
+
+(make-instance 
+ 'darcs-repo
+ :name :trivial-utf-8
+ :url "http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8")
+
+(make-instance 
+ 'darcs-repo
+ :name :ieee-floats
+ :url "http://common-lisp.net/project/ieee-floats/darcs/ieee-floats")
+
+(make-instance 
+ 'git-repo
+ :name :clsql
+ :url "git://git.b9.com/clsql.git"
+ :additional-packages '(:clsql-aodbc
+			:clsql-db2
+			:clsql-mysql
+			:clsql-odbc
+			:clsql-oracle
+			:clsql-postgresql-socket
+			:clsql-postgresql
+			:clsql-sqlite
+			:clsql-sqlite3
+			:clsql-tests
+			:clsql-uffi
+			))
+
+(make-instance 
+ 'git-repo
+ :name :uffi
+ :url "git://git.b9.com/uffi.git")
