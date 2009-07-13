@@ -6,27 +6,27 @@
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which git")
        (if (not (eql code 0))
-	   (error "git executable not found, required to get the package source"))))
+	   (error "git executable not found. Please install the Git version control system and try again."))))
     (:mercurial
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which hg")
        (if (not (eql code 0))
-	   (error "hg (mercurial) executable not found, required to get the package source"))))
+	   (error "hg (mercurial) executable not found. Please install the Mercurial version control system and try again."))))
     (:darcs
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which darcs")
        (if (not (eql code 0))
-	   (error "darcs executable not found, required to get the package source"))))
+	   (error "darcs executable not found. Please install the Darcs version control system and try again."))))
     (:svn
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which svn")
        (if (not (eql code 0))
-	   (error "svn executable not found, required to get the package source"))))
+	   (error "svn executable not found. Please install the Subversion version control system and try again."))))
     (:bzr
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which bzr")
        (if (not (eql code 0))
-	   (error "bzr executable not found, required to get the package source"))))))
+	   (error "bzr executable not found. Please install the Bazaar version control system and try again."))))))
 	  
 (defun install (package &key (force nil))
   "Install the given package, possibly downloading it and any
@@ -238,9 +238,16 @@ and try again."
 
 (defmethod asd-file ((p git-repo) &optional (package-name nil)) 
   (with-slots (name) p
-    (car (cl-ppcre:split 
-	  "\\n"
-	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .git" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
+    (multiple-value-bind (result code)
+	(safe-shell-command t "find ~a -name ~a.asd | grep -v .git" 
+			    (dir-as-file (working-dir p))
+			    (string-downcase (or package-name name)))
+      (if (not (eql code 0))
+	  (error "Couldn't find asdf defsystem file ~A.asd. According to the manifest, it should be in ~A " 
+		 (string-downcase (or package-name name)) (working-dir p)))
+      (car (cl-ppcre:split 
+	    "\\n"
+	    result)))))
 
 (defmethod repo-status ((p git-repo))
   (let ((result (safe-shell-command t "cd ~a ; git status" (working-dir p))))
@@ -407,9 +414,10 @@ and try again."
   (loop for package in (all-packages)
        do
        (cond ((probe-file (working-dir package))
+	      (with-simple-restart (abort "Skip updating ~A" package)
 	      (let ((message (update-repo package)))
 		(if message
-		    (dump-message package message)))))))
+		    (dump-message package message))))))))
 
 (defun all-repo-status ()
   "For all repositories, print changes that have been made to the working 

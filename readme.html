@@ -9,30 +9,30 @@
 
     <p>Repo-install is a common lisp package manager that can be used to
       chase down and download dependencies between common lisp
-      packages. Unlike other package managers (asdf-install, mudballs),
+      libraries. Unlike other package managers (asdf-install, mudballs),
       repo-install maintains the connection between source code on your
-      disk, and the upstream repository.</p>
+      disk and the upstream repository.</p>
 
-    <p> In cases where the upstream package is stored using
+    <p> In cases where the upstream library is stored using
       distributed version control (DVC), the local files are stored in
       the same DVC system as a clone.</p>
 
-    <p> When the upstream package is not a DVC, repo-install will
+    <p> When the upstream library is not a DVC, repo-install will
       create a local DVC repository with the non-DVC distribution system
-      (tarballs, cvs, or svn), as input to the local repository.</p>
+      (tarballs, cvs, or svn) as input to the local repository.</p>
 
     <p>There are two primary advantages to this: 
       <ul>
-	<li>Changes you make to your local copy of the package remain
+	<li>Changes you make to your local copy of the library remain
 	  in place even when you update to a newer version of the
-	  package.</li>
+	  library.</li>
 	<li>It is much easier to submit patches to the upstream
 	  maintainer. For DVC, it is also much easier for the upstream
 	  maintainer to integrate your patches.</li>
     </ul></p>
 
     <p>Both of these capabilities are particularly important when
-      working on common lisp. Several very useful common lisp packages
+      working on common lisp. Several very useful common lisp libraries
       are maintained on a less than full time basis. You may need to
       maintain your local patches for weeks or forever if the upstream
       maintainer doesn't have the time to integrate them sooner.</p>
@@ -40,7 +40,7 @@
     <p>Unlike Perl, Python, and Ruby, common lisp does not have a
       reference implementation. Downstream users can submit valuable
       patches for different lisp environments, especially environments
-      that are not easily available to a package maintainer.</p>
+      that are not easily available to a library maintainer.</p>
 
     <p>Finally, common-lisp users tend to be very technical. With such
       an experienced user base, downstream patches should turn out to be
@@ -61,11 +61,12 @@
     <p>Repo-install is bootstrapped using a tarball that can be found
       <a href="http://www.machineinsight.com/repo-install/repo-install-bootstrap.tgz">
 	http://www.machineinsight.com/repo-install/repo-install-bootstrap.tgz</a>.
-      The tarball contains the minimum set of packages needed to get
-      repo-install working. The bootstrap packages (like all
-      repo-install packages) are actually software
+      The tarball contains the minimum set of libraries needed to get
+      repo-install working. The bootstrap libraries (like all
+      repo-install libraries) are actually software
       repositories. Patches to these systems (including repo-install)
-      can be submitted according to conventions for the given system.</p>
+      can be submitted according to conventions for the given
+      system.</p>
 
     <p>Untar to a convenient location and add the following to
       your lisp initialization file.</p>
@@ -75,7 +76,7 @@
     </p>
 
     <p>Repo-install takes the philosophy that the correct version
-      control system to use is the one the upstream package maintainer
+      control system to use is the one the upstream library maintainer
       is using. Therefore, you will
       need <a href="http://git-scm.com/">Git</a>, <a href="http://bazaar-vcs.org/">Bazaar</a>, <a href="http://subversion.tigris.org/">Subversion</a>,
       <a href="http://mercurial.selenic.com/wiki/">Mercurial</a>,
@@ -140,18 +141,18 @@
 
     <p>You can look in most-recent-manifest.lisp for examples of each of these classes.</p>
 
-    <p>Feel free to add any packages that you may need to this file and submit a patch.</p>
+    <p>Feel free to add any libraries that you may need to this file and submit a patch.</p>
       
     
     <h2>Exported Functions</h2>
     <ul>
-      <li><b>(ri:install <i>package</i>)</b><p> Install the given package,
+      <li><b>(ri:install <i>library</i>)</b><p> Install the given library,
 	  possibly downloading it and any dependencies found in its asdf
 	  system definition. If a particular dependency is not found in
-	  the manifest, *current-manifest*, signal an error. In this case,
-	  you'll have to add the package to the manifest and try again.</p></li>
-      <li><b>(ri:find-repo <i>package</i>)</b><p>
-	  Find the repository with the given name.
+	  the manifest signal an error. In this case,
+	  you'll have to add the library to the manifest and try again.</p></li>
+      <li><b>(ri:find-repo <i>library</i>)</b><p>
+	  Find the repository for the given library.
       </p></li>
       <li><b>(ri:update-repo <i>repo</i>)</b><p> Download any
 	  changes from the upstream repository. For distributed
@@ -169,7 +170,7 @@
       </p></li>
       <li><b>(ri:all-repo-status)</b><p> Run repo-status on all
 	  locally installed libraries. Print out descriptions of
-	  packages that have uncommitted changes.
+	  those that have uncommitted changes.
       </p></li>
       <li><b>(ri:local-repo-changes <i>repo</i>)</b><p> Return a
 	  string describing any changes made to the local repository
@@ -179,7 +180,7 @@
       </p></li>
       <li><b>(ri:all-local-repo-changes)</b><p> Run local-repo-changes
 	  on all locally installed libraries. Print out descriptions
-	  of packages that have uncommitted changes.
+	  of those that have uncommitted changes.
       </p></li>
     </ul>
 
@@ -189,7 +190,7 @@
     <h2>To Do</h2>
     Ordered by priority.
     <ul>
-      <li>Automatically run regression tests on update (for packages that have regression tests).</li>
+      <li>Automatically run regression tests on update (for libraries that have regression tests).</li>
       <li>implement 'darcs trackdown' across all repository types.</li>
       <li>Code to automatically submit patches.</li>
       <li>Able to specify a tag or a branch on the upstream repository</li>
