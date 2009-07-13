@@ -378,3 +378,9 @@
  'git-repo
  :name :uffi
  :url "git://git.b9.com/uffi.git")
+
+
+(make-instance
+ 'git-repo
+ :name :cl-future
+ :url "git://github.com/jpalmucci/cl-future.git")
