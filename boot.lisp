@@ -13,4 +13,4 @@
 
 (asdf:load-system :repo-install)
 
-(load (merge-pathnames (make-pathname :name "most-recent-manifest") *load-truename*))
+(load (merge-pathnames (make-pathname :name "most-recent-manifest" :type "lisp") *load-truename*))

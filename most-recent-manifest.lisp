@@ -257,8 +257,18 @@
 
 (make-instance
  'git-repo
+ :name :closure-common
+ :url "git://repo.or.cz/closure-common.git")
+
+(make-instance
+ 'git-repo
  :name :cxml
  :url "git://repo.or.cz/cxml.git")
+
+(make-instance
+ 'git-repo
+ :name :closure-html
+ :url "git://repo.or.cz/closure-html.git")
 
 (make-instance
  'git-repo
@@ -378,3 +388,9 @@
  'git-repo
  :name :uffi
  :url "git://git.b9.com/uffi.git")
+
+
+(make-instance
+ 'git-repo
+ :name :cl-future
+ :url "git://github.com/jpalmucci/cl-future.git")
