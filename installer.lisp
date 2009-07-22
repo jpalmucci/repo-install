@@ -300,7 +300,7 @@ and try again."
 	  (t result))))
 
 (defmethod local-repo-changes ((p mercurial-repo))
-  (let ((result (safe-shell-command nil "cd ~a ; hg outgoing" (working-dir p))))
+  (let ((result (safe-shell-command t "cd ~a ; hg outgoing" (working-dir p))))
     (cond ((search "no changes found" result)
 	   nil)
 	  (t result))))
@@ -317,7 +317,7 @@ and try again."
 	       (safe-shell-command nil "hg clone ~a ~a" url 
 				   (string-right-trim "/" (format nil "~A" dir)))))
 	    (t
-	     (let ((result (safe-shell-command nil "cd ~a ; hg pull" dir)))
+	     (let ((result (safe-shell-command nil "cd ~a ; hg pull ; hg update" dir)))
 	       (cond ((search "no changes found" result)
 		      nil)
 		     (t result))))))))
