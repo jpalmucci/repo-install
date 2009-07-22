@@ -406,3 +406,14 @@
  :name :s-xml
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/s-xml/cvsroot"
  :module "s-xml")
+
+(make-instance 
+ 'darcs-repo
+ :name :trivial-timeout
+ :url "http://common-lisp.net/project/trivial-timeout"
+)
+
+(make-instance
+ 'cliki-repo
+ :name :salza2)
+
