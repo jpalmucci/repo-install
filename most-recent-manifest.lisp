@@ -394,3 +394,15 @@
  'git-repo
  :name :cl-future
  :url "git://github.com/jpalmucci/cl-future.git")
+
+(make-instance
+ 'cvs-repo
+ :name :cl-soap
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-soap/cvsroot"
+ :module "cl-soap")
+
+(make-instance
+ 'cvs-repo
+ :name :s-xml
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/s-xml/cvsroot"
+ :module "s-xml")
