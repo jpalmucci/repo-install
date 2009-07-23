@@ -417,3 +417,18 @@
  'cliki-repo
  :name :salza2)
 
+(make-instance
+ 'darcs-repo
+ :name :cl-twitter
+ :url "http://www.common-lisp.net/project/cl-twitter/darcs/cl-twitter")
+
+(make-instance
+ 'darcs-repo
+ :name :cl-interpol
+ :url "http://common-lisp.net/~loliveira/ediware/cl-interpol")
+
+(make-instance 
+ 'tarball-backed-bzr-repo
+ :name :cl-unicode
+ :url "http://weitz.de/files/cl-unicode.tar.gz"
+ :strip-components 1)
