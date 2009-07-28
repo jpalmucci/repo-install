@@ -144,6 +144,9 @@ and try again."
   (safe-shell-command nil (format nil "cd ~a ; tar xzf ~a ~a ; bzr commit -m 'new tarball received'" bzr-working-dir tar-options tarball))
   )
   
+(defmethod update-repo ((s symbol))
+  (update-repo (find-repo s)))
+
 (defmethod update-repo ((p tarball-backed-bzr-repo))
   "update the local database from the cache."
   (test-environment :bzr)

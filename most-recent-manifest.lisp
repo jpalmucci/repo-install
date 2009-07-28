@@ -420,7 +420,8 @@
 (make-instance
  'darcs-repo
  :name :cl-twitter
- :url "http://www.common-lisp.net/project/cl-twitter/darcs/cl-twitter")
+ :url "http://www.common-lisp.net/project/cl-twitter/darcs/cl-twitter"
+ :additional-packages '(:cl-twitter-db))
 
 (make-instance
  'darcs-repo
@@ -432,3 +433,9 @@
  :name :cl-unicode
  :url "http://weitz.de/files/cl-unicode.tar.gz"
  :strip-components 1)
+
+(make-instance
+ 'darcs-repo
+ :name :elephant
+ :url "http://www.common-lisp.net/project/elephant/darcs/elephant-1.0"
+ :additional-packages '(:ele-bdb :ele-clp :ele-postmodern))
