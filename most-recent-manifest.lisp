@@ -439,3 +439,15 @@
  :name :elephant
  :url "http://www.common-lisp.net/project/elephant/darcs/elephant-1.0"
  :additional-packages '(:ele-bdb :ele-clp :ele-postmodern))
+
+(make-instance                                                                                                                                 
+ 'cliki-repo                                                                                                                                   
+ :name :pxmlutils)                                                                                                                             
+                                                                                                                                               
+(make-instance                                                                                                                                 
+ 'cvs-repo                                                                                                                                     
+ :name :portableaserve
+ :cvsroot ":pserver:anonymous@portableaserve.cvs.sourceforge.net:/cvsroot/portableaserve"
+ :module "portableaserve"
+ :additional-packages '(:acl-compat))
+                                                   
