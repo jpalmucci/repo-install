@@ -432,3 +432,15 @@
  :name :cl-unicode
  :url "http://weitz.de/files/cl-unicode.tar.gz"
  :strip-components 1)
+
+(make-instance                                                                                                                                 
+ 'cliki-repo                                                                                                                                   
+ :name :pxmlutils)                                                                                                                             
+                                                                                                                                               
+(make-instance                                                                                                                                 
+ 'cvs-repo                                                                                                                                     
+ :name :portableaserve
+ :cvsroot ":pserver:anonymous@portableaserve.cvs.sourceforge.net:/cvsroot/portableaserve"
+ :module "portableaserve"
+ :additional-packages '(:acl-compat))
+                                                   
