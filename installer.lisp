@@ -138,10 +138,12 @@ and try again."
 
 (defun replace-bzr-contents (bzr-working-dir tarball &optional (tar-options ""))
   "replace the contents of the bzr working directory with the tarball and commit any changes"
-  (loop for file in (directory bzr-working-dir)
-       when (not (equal (pathname-name file) ".bzr"))
-     do (cl-fad:delete-directory-and-files file))
-  (safe-shell-command nil (format nil "cd ~a ; tar xzf ~a ~a ; bzr commit -m 'new tarball received'" bzr-working-dir tar-options tarball))
+  (loop for file in (cl-fad:list-directory bzr-working-dir)
+       when (not (equal (pathname-name (cl-fad:pathname-as-file file)) ".bzr"))
+     do (if (cl-fad:directory-pathname-p file)
+	    (cl-fad:delete-directory-and-files file)
+	    (delete-file file)))
+  (safe-shell-command nil (format nil "cd ~a ; tar xzf ~a ~a ; bzr commit --unchanged -m 'new tarball received'" bzr-working-dir tarball tar-options))
   )
   
 (defmethod update-repo ((p tarball-backed-bzr-repo))
@@ -168,12 +170,15 @@ and try again."
 				      (if strip-components
 					  (format nil "--strip-components ~d" strip-components) ""))
 	 
+		  (safe-shell-command nil "cd ~a ; bzr add . ; bzr commit -m 'initial tarball' ; cd .. ; bzr branch upstream local " (upstream-dir p))
 		  ;; if the default .bzrignore file is not there, add it
-		  (let ((bzrpath  (make-pathname :name ".bzrignore" :defaults (upstream-dir p))))
+		  (let ((bzrpath  (make-pathname :name ".bzrignore" :defaults (working-dir p))))
 		    (cond ((null (probe-file bzrpath))
 			   (with-open-file (s bzrpath :direction :output)
-			     (format s "*.fasl~&*~~~&"))))
-		    (safe-shell-command nil "cd ~a ; bzr add . ; bzr commit -m 'initial tarball' ; cd .. ; bzr branch upstream local " (upstream-dir p))))))
+			     (format s "*.fasl~&*~~~&"))
+			   (safe-shell-command nil "cd ~a ; bzr add .bzrignore ; bzr commit -m 'add default .bzrignore' " (working-dir p))
+			   ))
+		    ))))
 	      ((not (files-different tarball-path (format nil "~a/tarballs/~d" (database-dir p) (car prev-tarballs))))
 	       ;; no change in the tarball, leave it alone
 	       (delete-file tarball-path)
