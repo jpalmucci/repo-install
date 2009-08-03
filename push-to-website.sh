@@ -6,10 +6,7 @@ sudo tar -c --exclude '*~' --exclude '*.fasl' --exclude '*.dx64fsl' -zvf /Librar
     repo-install/asdf \
     repo-install/repo-install repo-install/systems/repo-install.asd \
     repo-install/cl-ppcre repo-install/systems/cl-ppcre.asd \
-    repo-install/cl-fad repo-install/systems/cl-fad.asd \
-    repo-install/split-sequence repo-install/systems/split-sequence.asd \
-    repo-install/trivial-http repo-install/systems/trivial-http.asd \
-    repo-install/usocket repo-install/systems/usocket.asd
+    repo-install/cl-fad repo-install/systems/cl-fad.asd
 
 popd
 
