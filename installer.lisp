@@ -2,6 +2,11 @@
 
 (defun test-environment (repo-type)
   (ecase repo-type 
+    (:wget
+     (multiple-value-bind (result code)
+	 (safe-shell-command t "which wget")
+       (if (not (eql code 0))
+	   (error "wget executable not found. Please install the wget url downloader try again."))))
     (:git
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which git")
@@ -152,6 +157,7 @@ and try again."
 (defmethod update-repo ((p tarball-backed-bzr-repo))
   "update the local database from the cache."
   (test-environment :bzr)
+  (test-environment :wget)
 	   
   (let* ((dir (database-dir p))
 	 (upstream (merge-pathnames "upstream" dir)))
@@ -159,9 +165,11 @@ and try again."
       (makedirs (merge-pathnames "tarballs" (database-dir p)))
       (let ((tarball-path (merge-pathnames (format nil "tarballs/~a" (get-universal-time))
 					   (database-dir p)))
-	    (prev-tarballs (sort (mapcar #'(lambda (x) (parse-integer (pathname-name x))) (directory (merge-pathnames "tarballs/" (database-dir p)))) #'>)))
-	(shttp:http-download url tarball-path)
-	(cond ((eql (length prev-tarballs) 0)
+	    (prev-tarballs (sort (mapcar #'(lambda (x) (parse-integer (pathname-name x))) (cl-fad:list-directory (merge-pathnames "tarballs/" (database-dir p)))) #'>)))
+	(safe-shell-command t "wget ~a -O ~a" url tarball-path)
+	(cond ((not (probe-file tarball-path))
+	       (error "Couldn't download tarball"))
+	      ((eql (length prev-tarballs) 0)
 	       ;; make sure that we don't leave around a partially created repo
 	       (delete-dir-on-error dir
 		 ;; first time we grabbed a tarball, build the local repository

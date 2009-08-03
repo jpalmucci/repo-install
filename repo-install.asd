@@ -17,7 +17,7 @@
 )
 
 (asdf:defsystem repo-install
-  :depends-on (trivial-http cl-fad cl-ppcre)
+  :depends-on (cl-fad cl-ppcre)
   :components ((:file "utilities")
 	       (:file "vars")
 	       (:file "installer")
