@@ -451,3 +451,71 @@
  :module "portableaserve"
  :additional-packages '(:acl-compat))
                                                    
+(make-instance
+ 'darcs-repo
+ :name :cl-perec
+ :url "http://common-lisp.net/project/cl-perec/darcs/cl-perec")
+
+(make-instance
+ 'darcs-repo
+ :name :cl-rdbms
+ :url "http://common-lisp.net/project/cl-rdbms/darcs/cl-rdbms")
+
+(make-instance
+ 'darcs-repo
+ :name :defclass-star
+ :url "http://common-lisp.net/project/defclass-star/darcs/defclass-star")
+
+(make-instance
+ 'darcs-repo
+ :name :cl-syntax-sugar
+ :url "http://common-lisp.net/project/cl-syntax-sugar/darcs/cl-syntax-sugar")
+
+(make-instance
+ 'darcs-repo
+ :name :cl-walker
+ :url "http://common-lisp.net/project/cl-walker/darcs/cl-walker")
+
+(make-instance
+ 'darcs-repo
+ :name :cl-serializer
+ :url "http://common-lisp.net/project/cl-serializer/darcs/cl-serializer")
+
+(make-instance
+ 'darcs-repo
+ :name :local-time
+ :url "http://common-lisp.net/project/local-time/darcs/local-time")
+
+(make-instance
+ 'cliki-repo
+ :name :ironclad)
+
+(make-instance
+ 'darcs-repo
+ :name :cl-yalog
+ :url "http://www.common-lisp.net/project/cl-dwim/darcs/cl-yalog")
+
+(make-instance
+ 'darcs-repo
+ :name :cl-def
+ :url "http://www.common-lisp.net/project/cl-def/darcs/cl-def/")
+
+(make-instance
+ 'darcs-repo
+ :name :metacopy
+ :url "http://www.common-lisp.net/project/cl-dwim/darcs/metacopy")
+
+(make-instance
+ 'darcs-repo
+ :name :contextl
+ :url "http://www.common-lisp.net/project/closer/darcs/contextl")
+
+(make-instance
+ 'darcs-repo
+ :name :lw-compat
+ :url "http://www.common-lisp.net/project/closer/darcs/lw-compat")
+
+(make-instance
+ 'darcs-repo
+ :name :computed-class
+ :url "http://www.common-lisp.net/project/computed-class/darcs/computed-class")
