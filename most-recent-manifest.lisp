@@ -459,7 +459,12 @@
 (make-instance
  'darcs-repo
  :name :cl-rdbms
- :url "http://common-lisp.net/project/cl-rdbms/darcs/cl-rdbms")
+ :url "http://common-lisp.net/project/cl-rdbms/darcs/cl-rdbms"
+ :additional-packages '((:cl-rdbms.oracle :cl-rdbms)
+                        (:cl-rdbms.postgresql :cl-rdbms)
+                        (:cl-rdbms.postmodern :cl-rdbms)
+                        (:cl-rdbms.sqlite :cl-rdbms)
+                        (:cl-rdbms-test :cl-rdbms)))
 
 (make-instance
  'darcs-repo
