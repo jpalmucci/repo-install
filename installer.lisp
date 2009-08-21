@@ -58,7 +58,13 @@ and try again."
 
 (defclass base-repo ()
   ((name :initarg :name :reader name)
-   (additional-packages :initarg :additional-packages :initform nil)
+   (additional-packages :initarg :additional-packages :initform nil
+                        :documentation "A list of other defsystems
+                        that are shipped with this one. Can be a list,
+                        in which case the second element is the
+                        defsystem in whose asd file the defsystem is
+                        defined. (common in cases where system
+                        includes plugins)")
    (tester :initarg :tester :initform nil 
 	   :documentation "A funcallable object that will test the library. Returns true on success."))
   
@@ -74,6 +80,8 @@ and try again."
   (with-slots (name additional-packages) p
     (loop for package in (cons name additional-packages)
 	 do
+         (if (listp package)
+             (setq package (first package)))
 	 (setf (gethash package *all-packages*)
 	       p))))
 
@@ -94,10 +102,15 @@ and try again."
     (with-slots (name additional-packages) p
       (loop for package in (cons name additional-packages)
 	 do
-	 (safe-shell-command nil "ln -sf ~a ~asystems/~a.asd" 
-			     (asd-file p package)
-			     *installer-directory* (string-downcase package))))
-    result))
+           (cond ((listp package)
+                  (safe-shell-command nil "ln -sf ~a ~asystems/~a.asd" 
+                               (asd-file p (second package))
+                               *installer-directory* (first package)))
+                 (t
+                  (safe-shell-command nil "ln -sf ~a ~asystems/~a.asd" 
+                               (asd-file p package)
+                               *installer-directory* package))))
+      result)))
 
 (defclass tarball-backed-bzr-repo (base-repo)
   ((url :initarg :url
@@ -125,7 +138,9 @@ and try again."
   (with-slots (name) p
     (car 
      (cl-ppcre:split "\\n" 
-		     (safe-shell-command nil "find ~a -name ~a.asd | grep -v .bzr" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
+		     (safe-shell-command nil "find ~a -name ~a.asd | grep -v .bzr"
+                                         (dir-as-file (working-dir p))
+                                         (string-downcase (or package-name name)))))))
 
 (defmethod repo-status ((p tarball-backed-bzr-repo))
   (let ((result (safe-shell-command t "cd ~a ; bzr status" (working-dir p))))
@@ -246,7 +261,7 @@ and try again."
 	     (delete-dir-on-error dir
 	       (safe-shell-command nil "darcs get ~a ~a" url dir)))
 	    (t
-	     (let ((result (safe-shell-command nil "cd ~a ; darcs pull -a" dir)))
+	     (let ((result (safe-shell-command nil "cd ~a ; darcs pull -a ~a" dir url)))
 	       (cond ((search "No remote changes to pull in!" result)
 		      nil)
 		     (t result))))))))
