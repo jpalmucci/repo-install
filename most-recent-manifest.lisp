@@ -451,3 +451,7 @@
  :module "portableaserve"
  :additional-packages '(:acl-compat))
                                                    
+(make-instance
+ 'git-repo
+ :name :cl-mysql
+ :url "http://www.hackinghat.com/repositories/cl-mysql.git/")
