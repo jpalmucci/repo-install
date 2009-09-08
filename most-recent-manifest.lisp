@@ -442,7 +442,8 @@
 
 (make-instance                                                                                                                                 
  'cliki-repo                                                                                                                                   
- :name :pxmlutils)                                                                                                                             
+ :name :pxmlutils
+ :strip-components 1)                                                                                                                             
                                                                                                                                                
 (make-instance                                                                                                                                 
  'cvs-repo                                                                                                                                     
@@ -529,3 +530,13 @@
  'darcs-repo
  :name :computed-class
  :url "http://www.common-lisp.net/project/computed-class/darcs/computed-class")
+
+(make-instance
+ 'darcs-repo
+ :name :eager-future
+ :url "http://common-lisp.net/project/eager-future/repository/eager-future")
+
+(make-instance 
+ 'git-repo
+ :name :closure-html
+ :url "git://repo.or.cz/closure-html.git")
