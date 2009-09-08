@@ -540,3 +540,34 @@
  'git-repo
  :name :closure-html
  :url "git://repo.or.cz/closure-html.git")
+
+(make-instance 
+ 'cvs-repo
+ :name :cl-plplot
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plplot/cvsroot"
+ :module "cl-plplot")
+
+(make-instance 
+ 'git-repo
+ :name :cl-2d
+ :url "git://github.com/tpapp/cl-2d.git")
+
+(make-instance 
+ 'git-repo
+ :name :cl-numlib
+ :url "git://github.com/tpapp/cl-numlib.git")
+
+(make-instance 
+ 'git-repo
+ :name :array-operations
+ :url "git://github.com/tpapp/array-operations.git")
+
+(make-instance 
+ 'git-repo
+ :name :cl-colors
+ :url "git://github.com/tpapp/cl-colors.git")
+
+(make-instance 
+ 'git-repo
+ :name :cl-cairo2
+ :url "git://github.com/tpapp/cl-cairo2.git")
