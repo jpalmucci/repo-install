@@ -45,6 +45,11 @@
  :url "http://common-lisp.net/project/trivial-http"
 )
 
+(make-instance 
+ 'darcs-repo
+ :name :trivial-shell
+ :url "http://common-lisp.net/project/trivial-shell")
+
 (make-instance
  'svn-repo
  :name :usocket

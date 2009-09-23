@@ -143,7 +143,7 @@ and try again."
                                          (string-downcase (or package-name name)))))))
 
 (defmethod repo-status ((p tarball-backed-bzr-repo))
-  (let ((result (safe-shell-command t "cd ~a ; bzr status" (working-dir p))))
+  (let ((result (safe-shell-command t "(cd ~a ; bzr status)" (working-dir p))))
     (cond ((equalp result "")
 	   nil)
 	  (t
@@ -151,7 +151,7 @@ and try again."
 
 (defmethod local-repo-changes ((p tarball-backed-bzr-repo))
   (multiple-value-bind (result code)
-      (safe-shell-command t "cd ~a ; bzr missing" (working-dir p))
+      (safe-shell-command t "(cd ~a ; bzr missing)" (working-dir p))
     (if (eql code 0) 
 	nil
 	result)))
@@ -163,7 +163,7 @@ and try again."
      do (if (cl-fad:directory-pathname-p file)
 	    (cl-fad:delete-directory-and-files file)
 	    (delete-file file)))
-  (safe-shell-command nil (format nil "cd ~a ; tar xzf ~a ~a ; bzr commit --unchanged -m 'new tarball received'" bzr-working-dir tarball tar-options))
+  (safe-shell-command nil (format nil "(cd ~a ; tar xzf ~a ~a ; bzr commit --unchanged -m 'new tarball received')" bzr-working-dir tarball tar-options))
   )
   
 (defmethod update-repo ((s symbol))
@@ -191,18 +191,18 @@ and try again."
 		 (makedirs upstream)
 		 (concatenate
 		  'string 
-		  (safe-shell-command nil "cd ~a ; tar xvf ~a ~a ; bzr init"
+		  (safe-shell-command nil "(cd ~a ; tar xvf ~a ~a ; bzr init)"
 				      upstream tarball-path
 				      (if strip-components
 					  (format nil "--strip-components ~d" strip-components) ""))
 	 
-		  (safe-shell-command nil "cd ~a ; bzr add . ; bzr commit -m 'initial tarball' ; cd .. ; bzr branch upstream local " (upstream-dir p))
+		  (safe-shell-command nil "(cd ~a ; bzr add . ; bzr commit -m 'initial tarball' ; cd .. ; bzr branch upstream local)" (upstream-dir p))
 		  ;; if the default .bzrignore file is not there, add it
 		  (let ((bzrpath  (make-pathname :name ".bzrignore" :defaults (working-dir p))))
 		    (cond ((null (probe-file bzrpath))
 			   (with-open-file (s bzrpath :direction :output)
 			     (format s "*.fasl~&*~~~&"))
-			   (safe-shell-command nil "cd ~a ; bzr add .bzrignore ; bzr commit -m 'add default .bzrignore' " (working-dir p))
+			   (safe-shell-command nil "(cd ~a ; bzr add .bzrignore ; bzr commit -m 'add default .bzrignore')" (working-dir p))
 			   ))
 		    ))))
 	      ((not (files-different tarball-path (format nil "~a/tarballs/~d" (database-dir p) (car prev-tarballs))))
@@ -215,7 +215,7 @@ and try again."
 				     (if strip-components
 					 (format nil "--strip-components ~d" strip-components)))
 	       ;; merge upstream changes to local branch
-	       (safe-shell-command nil "cd ~a ; bzr merge " (working-dir p))))))))
+	       (safe-shell-command nil "(cd ~a ; bzr merge)" (working-dir p))))))))
 
 (defclass cliki-repo (tarball-backed-bzr-repo)
   ()
@@ -236,14 +236,14 @@ and try again."
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v _darcs" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod repo-status ((p darcs-repo))
-  (let ((result (safe-shell-command t "cd ~a ; darcs whatsnew" (working-dir p))))
+  (let ((result (safe-shell-command t "(cd ~a ; darcs whatsnew)" (working-dir p))))
     (cond ((search "No changes!" result)
 	   nil)
 	  (t
 	   result))))
 
 (defmethod local-repo-changes ((p darcs-repo))
-  (let ((result (safe-shell-command nil "cd ~a ; darcs send --dry-run" (working-dir p))))
+  (let ((result (safe-shell-command nil "(cd ~a ; darcs send --dry-run)" (working-dir p))))
     (cond ((search "No recorded local changes to send!" result)
 	   nil)
 	  (t
@@ -261,7 +261,7 @@ and try again."
 	     (delete-dir-on-error dir
 	       (safe-shell-command nil "darcs get ~a ~a" url dir)))
 	    (t
-	     (let ((result (safe-shell-command nil "cd ~a ; darcs pull -a ~a" dir url)))
+	     (let ((result (safe-shell-command nil "(cd ~a ; darcs pull -a ~a)" dir url)))
 	       (cond ((search "No remote changes to pull in!" result)
 		      nil)
 		     (t result))))))))
@@ -284,13 +284,13 @@ and try again."
 	    result)))))
 
 (defmethod repo-status ((p git-repo))
-  (let ((result (safe-shell-command t "cd ~a ; git status" (working-dir p))))
+  (let ((result (safe-shell-command t "(cd ~a ; git status)" (working-dir p))))
     (cond ((search "nothing to commit (working directory clean)" result)
 	   nil)
 	  (t result))))
 
 (defmethod local-repo-changes ((p git-repo))
-  (let ((result (safe-shell-command nil "cd ~a ; git branch -v" (working-dir p))))
+  (let ((result (safe-shell-command nil "(cd ~a ; git branch -v)" (working-dir p))))
     (cond ((search "[ahead " result)
 	   result)
 	  (t nil))))
@@ -307,7 +307,7 @@ and try again."
 	       (safe-shell-command nil"git clone ~a ~a" url 
 				   (string-right-trim "/" (format nil "~A" dir)))))
 	    (t
-	     (let ((result (safe-shell-command nil "cd ~a ; git pull" dir)))
+	     (let ((result (safe-shell-command nil "(cd ~a ; git pull)" dir)))
 	       (cond ((search "Already up-to-date." result)
 		      nil)
 		     (t result))))))))
@@ -325,13 +325,13 @@ and try again."
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .hg" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod repo-status ((p mercurial-repo))
-  (let ((result (safe-shell-command t "cd ~a ; hg status" (working-dir p))))
+  (let ((result (safe-shell-command t "(cd ~a ; hg status)" (working-dir p))))
     (cond ((search "nothing to commit (working directory clean)" result)
 	   nil)
 	  (t result))))
 
 (defmethod local-repo-changes ((p mercurial-repo))
-  (let ((result (safe-shell-command t "cd ~a ; hg outgoing" (working-dir p))))
+  (let ((result (safe-shell-command t "(cd ~a ; hg outgoing)" (working-dir p))))
     (cond ((search "no changes found" result)
 	   nil)
 	  (t result))))
@@ -348,7 +348,7 @@ and try again."
 	       (safe-shell-command nil "hg clone ~a ~a" url 
 				   (string-right-trim "/" (format nil "~A" dir)))))
 	    (t
-	     (let ((result (safe-shell-command nil "cd ~a ; hg pull ; hg update" dir)))
+	     (let ((result (safe-shell-command nil "(cd ~a ; hg pull ; hg update)" dir)))
 	       (cond ((search "no changes found" result)
 		      nil)
 		     (t result))))))))
@@ -366,7 +366,7 @@ and try again."
 	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .svn" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod repo-status ((p svn-repo))
-  (let ((result (safe-shell-command nil "cd ~a ; svn status" (working-dir p))))
+  (let ((result (safe-shell-command nil "(cd ~a ; svn status)" (working-dir p))))
     (cond ((equalp result "")
 	   nil)
 	  (t
@@ -385,7 +385,7 @@ and try again."
 	       (makedirs dir)
 	       (safe-shell-command nil "svn co ~a ~a" url dir)))
 	    (t
-	     (let ((result (safe-shell-command nil "cd ~a ; svn update" dir)))
+	     (let ((result (safe-shell-command nil "(cd ~a ; svn update)" dir)))
 	       (cond ((search "At revision" result)
 		      nil)
 		     (t result))))))))
@@ -403,7 +403,7 @@ and try again."
 	  (safe-shell-command nil "find ~a -name ~a.asd" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
 
 (defmethod repo-status ((p cvs-repo))
-  (let ((result (safe-shell-command t "cd ~a ; cvs diff --brief" (working-dir p))))
+  (let ((result (safe-shell-command t "(cd ~a ; cvs diff --brief)" (working-dir p))))
     (cond ((search "differ" result)
 	   result)
 	  (t 
@@ -419,9 +419,9 @@ and try again."
 	     ;; make sure that we don't leave around a partially created repo
 	     (delete-dir-on-error dir
 	       (makedirs dir)
-	       (safe-shell-command nil "cd ~a ; cvs -z3 -d ~a co ~a" dir cvsroot module)))
+	       (safe-shell-command nil "(cd ~a ; cvs -z3 -d ~a co ~a)" dir cvsroot module)))
 	    (t
-	     (safe-shell-command nil "cd ~a/~a ; cvs update" dir module))))))
+	     (safe-shell-command nil "(cd ~a/~a ; cvs update)" dir module))))))
 
 
 (defun all-packages ()
