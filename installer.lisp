@@ -97,26 +97,6 @@ and try again."
   "Find the repository with the given name."
   (gethash (intern (string-upcase name) :keyword) *all-packages* nil))
 
-(defmethod update-repo :around ((p base-repo))
-  (let ((result (call-next-method p)))
-    (with-slots (name additional-packages) p
-      (loop for package in (cons name additional-packages)
-	 do
-           ;; make all the system links relative so that repo-install directories can be copied around
-           (cond ((listp package)
-                  (safe-shell-command nil "(cd ~a/systems ; ln -sf ~a ~a.asd)" 
-                                      *installer-directory* 
-                                      (cl-ppcre:regex-replace (pathname-to-string *installer-directory*) 
-                                                              (asd-file p (second package)) "../")
-                                      (first package)))
-                 (t
-                  (safe-shell-command nil "(cd ~a/systems ; ln -sf ~a ~a.asd)" 
-                                      *installer-directory* 
-                                      (cl-ppcre:regex-replace (pathname-to-string *installer-directory*) 
-                                                              (asd-file p package) "../")
-                                      package))))
-      result)))
-
 (defclass tarball-backed-bzr-repo (base-repo)
   ((url :initarg :url
 	:documentation "The url from which to grab the gzipped tar file.")
