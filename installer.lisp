@@ -102,14 +102,19 @@ and try again."
     (with-slots (name additional-packages) p
       (loop for package in (cons name additional-packages)
 	 do
+           ;; make all the system links relative so that repo-install directories can be copied around
            (cond ((listp package)
-                  (safe-shell-command nil "ln -sf ~a ~asystems/~a.asd" 
-                               (asd-file p (second package))
-                               *installer-directory* (first package)))
+                  (safe-shell-command nil "(cd ~a/systems ; ln -sf ~a ~a.asd)" 
+                                      *installer-directory* 
+                                      (cl-ppcre:regex-replace (pathname-to-string *installer-directory*) 
+                                                              (asd-file p (second package)) "../")
+                                      (first package)))
                  (t
-                  (safe-shell-command nil "ln -sf ~a ~asystems/~a.asd" 
-                               (asd-file p package)
-                               *installer-directory* package))))
+                  (safe-shell-command nil "(cd ~a/systems ; ln -sf ~a ~a.asd)" 
+                                      *installer-directory* 
+                                      (cl-ppcre:regex-replace (pathname-to-string *installer-directory*) 
+                                                              (asd-file p package) "../")
+                                      package))))
       result)))
 
 (defclass tarball-backed-bzr-repo (base-repo)

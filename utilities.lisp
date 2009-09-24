@@ -1,5 +1,9 @@
 (in-package :ri)
 
+(defun pathname-to-string (path)
+  (with-output-to-string (s)
+    (princ path s)))
+
 (defun parent-directory (dirpath)
   (make-pathname :directory (let ((dir (pathname-directory dirpath)))
                               (cons (car dir) (butlast (cdr dir))))))
