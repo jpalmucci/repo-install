@@ -28,7 +28,7 @@
   (let ((repo (find-repo system)))
     (if (null repo)
         (return-from asd-file-for-system nil))
-    (cond ((not (probe-file (asd-file repo system)))
+    (cond ((not (probe-file (working-dir repo)))
            (format t "Downloading ~a...~%" system)
            (update-repo repo)))
     (asd-file repo system)))
