@@ -28,9 +28,9 @@
   (let ((repo (find-repo system)))
     (if (null repo)
         (return-from asd-file-for-system nil))
-    (cond ((not (asd-file repo system))
+    (cond ((not (asd-file repo :package-name system))
            (format t "Downloading ~a...~%" system)
            (update-repo repo)))
-    (asd-file repo system)))
+    (asd-file repo :package-name system)))
 
 (pushnew 'asd-file-for-system asdf:*system-definition-search-functions*)

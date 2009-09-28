@@ -6,7 +6,8 @@
 
 (defun parent-directory (dirpath)
   (make-pathname :directory (let ((dir (pathname-directory dirpath)))
-                              (cons (car dir) (butlast (cdr dir))))))
+                              (cons (car dir) (butlast (cdr dir))))
+		 :device (pathname-device dirpath)))
 
 (defun dir-as-file (x)
   "trim the trailing /"
