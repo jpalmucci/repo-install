@@ -121,11 +121,15 @@ and try again."
 
 (defmethod asd-file ((p tarball-backed-bzr-repo) &optional (package-name nil))
   (with-slots (name) p
-    (car 
-     (cl-ppcre:split "\\n" 
-		     (safe-shell-command nil "find ~a -name ~a.asd | grep -v .bzr"
-                                         (dir-as-file (working-dir p))
-                                         (string-downcase (or package-name name)))))))
+    (let ((name-to-look-for (string-downcase (symbol-name (or package-name name)))))
+      (cl-fad:walk-directory 
+       (working-dir p) 
+       #'(lambda (x)
+           (cond ((and (equalp (string-downcase (pathname-type x)) "asd")
+                       (equalp (string-downcase (pathname-name x)) name-to-look-for)
+                       (not (member ".bzr" (pathname-directory x) :test #'equalp)))
+                  (return-from asd-file x)))))))
+  nil)
 
 (defmethod repo-status ((p tarball-backed-bzr-repo))
   (let ((result (safe-shell-command t "(cd ~a ; bzr status)" (working-dir p))))
@@ -216,9 +220,15 @@ and try again."
 
 (defmethod asd-file ((p darcs-repo) &optional (package-name nil))
   (with-slots (name) p
-    (car (cl-ppcre:split 
-	  "\\n" 
-	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v _darcs" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
+    (let ((name-to-look-for (string-downcase (symbol-name (or package-name name)))))
+      (cl-fad:walk-directory 
+       (working-dir p) 
+       #'(lambda (x)
+           (cond ((and (equalp (string-downcase (pathname-type x)) "asd")
+                       (equalp (string-downcase (pathname-name x)) name-to-look-for)
+                       (not (member "_darcs" (pathname-directory x) :test #'equalp)))
+                  (return-from asd-file x)))))))
+  nil)
 
 (defmethod repo-status ((p darcs-repo))
   (let ((result (safe-shell-command t "(cd ~a ; darcs whatsnew)" (working-dir p))))
@@ -255,18 +265,17 @@ and try again."
   ((url :initarg :url))
   )
 
-(defmethod asd-file ((p git-repo) &optional (package-name nil)) 
+(defmethod asd-file ((p git-repo) &optional (package-name nil))
   (with-slots (name) p
-    (multiple-value-bind (result code)
-	(safe-shell-command t "find ~a -name ~a.asd | grep -v .git" 
-			    (dir-as-file (working-dir p))
-			    (string-downcase (or package-name name)))
-      (if (not (eql code 0))
-	  (error "Couldn't find asdf defsystem file ~A.asd. According to the manifest, it should be in ~A " 
-		 (string-downcase (or package-name name)) (working-dir p)))
-      (car (cl-ppcre:split 
-	    "\\n"
-	    result)))))
+    (let ((name-to-look-for (string-downcase (symbol-name (or package-name name)))))
+      (cl-fad:walk-directory 
+       (working-dir p) 
+       #'(lambda (x)
+           (cond ((and (equalp (string-downcase (pathname-type x)) "asd")
+                       (equalp (string-downcase (pathname-name x)) name-to-look-for)
+                       (not (member ".git" (pathname-directory x) :test #'equalp)))
+                  (return-from asd-file x)))))))
+  nil)
 
 (defmethod repo-status ((p git-repo))
   (let ((result (safe-shell-command t "(cd ~a ; git status)" (working-dir p))))
@@ -303,11 +312,17 @@ and try again."
   ((url :initarg :url))
   )
 
-(defmethod asd-file ((p mercurial-repo) &optional (package-name nil)) 
+(defmethod asd-file ((p mercurial-repo) &optional (package-name nil))
   (with-slots (name) p
-    (car (cl-ppcre:split 
-	  "\\n"
-	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .hg" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
+    (let ((name-to-look-for (string-downcase (symbol-name (or package-name name)))))
+      (cl-fad:walk-directory 
+       (working-dir p) 
+       #'(lambda (x)
+           (cond ((and (equalp (string-downcase (pathname-type x)) "asd")
+                       (equalp (string-downcase (pathname-name x)) name-to-look-for)
+                       (not (member ".hg" (pathname-directory x) :test #'equalp)))
+                  (return-from asd-file x)))))))
+  nil)
 
 (defmethod repo-status ((p mercurial-repo))
   (let ((result (safe-shell-command t "(cd ~a ; hg status)" (working-dir p))))
@@ -346,9 +361,15 @@ and try again."
 
 (defmethod asd-file ((p svn-repo) &optional (package-name nil))
   (with-slots (name) p
-    (car (cl-ppcre:split 
-	  "\\n"
-	  (safe-shell-command nil "find ~a -name ~a.asd | grep -v .svn" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
+    (let ((name-to-look-for (string-downcase (symbol-name (or package-name name)))))
+      (cl-fad:walk-directory 
+       (working-dir p) 
+       #'(lambda (x)
+           (cond ((and (equalp (string-downcase (pathname-type x)) "asd")
+                       (equalp (string-downcase (pathname-name x)) name-to-look-for)
+                       (not (member ".svn" (pathname-directory x) :test #'equalp)))
+                  (return-from asd-file x)))))))
+  nil)
 
 (defmethod repo-status ((p svn-repo))
   (let ((result (safe-shell-command nil "(cd ~a ; svn status)" (working-dir p))))
@@ -383,9 +404,14 @@ and try again."
 
 (defmethod asd-file ((p cvs-repo) &optional (package-name nil))
   (with-slots (name) p
-    (car (cl-ppcre:split 
-	  "\\n"
-	  (safe-shell-command nil "find ~a -name ~a.asd" (dir-as-file (working-dir p)) (string-downcase (or package-name name)))))))
+    (let ((name-to-look-for (string-downcase (symbol-name (or package-name name)))))
+      (cl-fad:walk-directory 
+       (working-dir p) 
+       #'(lambda (x)
+           (cond ((and (equalp (string-downcase (pathname-type x)) "asd")
+                       (equalp (string-downcase (pathname-name x)) name-to-look-for))
+                  (return-from asd-file x)))))))
+  nil)
 
 (defmethod repo-status ((p cvs-repo))
   (let ((result (safe-shell-command t "(cd ~a ; cvs diff --brief)" (working-dir p))))
