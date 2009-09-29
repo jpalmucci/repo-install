@@ -25,6 +25,8 @@
 
 ;; tell asdf how to load repo-install packages
 (defun asd-file-for-system (system)
+  (cond ((stringp system)
+         (setq system (intern system :keyword))))
   (let ((repo (find-repo system)))
     (if (null repo)
         (return-from asd-file-for-system nil))
