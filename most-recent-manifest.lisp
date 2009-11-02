@@ -339,12 +339,14 @@
  :url "http://common-lisp.net/project/cl-cont/darcs/cl-cont")
 
 (make-instance
- 'cliki-repo
- :name :fare-matcher)
+ 'git-repo
+ :name :fare-matcher
+ :url "git://common-lisp.net/users/frideau/fare-matcher.git")
 
 (make-instance
- 'cliki-repo
- :name :fare-utils)
+ 'git-repo
+ :name :fare-utils
+ :url "git://common-lisp.net/users/frideau/fare-utils.git")
 
 (make-instance 
  'darcs-repo
