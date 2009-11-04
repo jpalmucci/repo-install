@@ -578,3 +578,25 @@
  'git-repo
  :name :cl-cairo2
  :url "git://github.com/tpapp/cl-cairo2.git")
+
+(make-instance
+ 'cvs-repo
+ :name :mcclim
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/mcclim/cvsroot"
+ :module "mcclim")
+
+(make-instance
+ 'cvs-repo
+ :name :flexichain
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/flexichain/cvsroot"
+ :module "flexichain")
+
+(make-instance
+ 'darcs-repo
+ :name :spatial-trees
+ :url "http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees")
+
+(make-instance
+ 'darcs-repo
+ :name :clx
+ :url "http://common-lisp.net/~crhodes/clx")
