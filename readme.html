@@ -50,10 +50,16 @@
     <p> <a href="http://common-lisp.net/project/clbuild">Clbuild</a>
       is another common lisp package manager that works with
       downstream repositories as opposed to tarballs. I decided not to
-      use it because it was missing some functionality I needed
-      (ri:all-repo-status, ri:all-repo-local-changes and TODOs below).
-      I'm finding that this functionality is much easier to implement
-      in Common Lisp.
+      use it for a few reasons:
+      <ul>
+        <li> It was missing some functionality I needed
+          (ri:all-repo-status, ri:all-repo-local-changes and TODOs
+          below).  I'm finding that this functionality is much easier
+          to implement in Common Lisp.</li>
+        <li> My emacs environment is set up to handle more than just
+        common lisp. I wanted to have my package manager work within
+        my existing environment.</li>
+      </ul>
     </p>
     
     <h2>Installing</h2>
@@ -146,11 +152,16 @@
     
     <h2>Exported Functions</h2>
     <ul>
-      <li><b>(ri:install <i>library</i>)</b><p> Install the given library,
-	  possibly downloading it and any dependencies found in its asdf
-	  system definition. If a particular dependency is not found in
-	  the manifest signal an error. In this case,
-	  you'll have to add the library to the manifest and try again.</p></li>
+      <li><b>(ri:install <i>library</i>)</b> <em>DEPRECIATED</em> 
+	  Simply use asdf:load-system or asdf:load-op. Repo-install
+	  provides a hook to these functions to download and install
+	  any needed dependencies.
+        <p> Install the given library,
+	  possibly downloading it and any dependencies found in its
+	  asdf system definition. If a particular dependency is not
+	  found in the manifest signal an error. In this case, you'll
+	  have to add the library to the manifest and try
+	  again.</p></li>
       <li><b>(ri:find-repo <i>library</i>)</b><p>
 	  Find the repository for the given library.
       </p></li>
