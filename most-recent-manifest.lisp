@@ -583,7 +583,9 @@
  'cvs-repo
  :name :mcclim
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/mcclim/cvsroot"
- :module "mcclim")
+ :module "mcclim"
+ :additional-packages '(:clim-examples :clim-listener :clouseau)
+ )
 
 (make-instance
  'cvs-repo
