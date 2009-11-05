@@ -602,3 +602,14 @@
  'darcs-repo
  :name :clx
  :url "http://common-lisp.net/~crhodes/clx")
+
+(make-instance
+ 'cvs-repo
+ :name :cl-prevalence
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-prevalence/cvsroot"
+ :module "cl-prevalence")
+
+(make-instance
+ 'darcs-repo
+ :name :s-sysdeps
+ :url "http://www.beta9.be/darcs/s-sysdeps")
