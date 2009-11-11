@@ -253,8 +253,9 @@
  :url "http://cl-lex.googlecode.com/svn/trunk/")
 
 (make-instance
- 'cliki-repo
- :name :fare-csv)
+ 'git-repo
+ :name :fare-csv
+ :url "http://common-lisp.net/r/users/frideau/fare-csv.git")
 
 (make-instance
  'cliki-repo
@@ -343,8 +344,9 @@
  :name :fare-matcher)
 
 (make-instance
- 'cliki-repo
- :name :fare-utils)
+ 'git-repo
+ :name :fare-utils
+ :url "http://common-lisp.net/r/users/frideau/fare-utils.git")
 
 (make-instance 
  'darcs-repo
