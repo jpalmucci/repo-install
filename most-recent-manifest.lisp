@@ -340,8 +340,9 @@
  :url "http://common-lisp.net/project/cl-cont/darcs/cl-cont")
 
 (make-instance
- 'cliki-repo
- :name :fare-matcher)
+ 'git-repo
+ :name :fare-matcher
+ :url "git://common-lisp.net/users/frideau/fare-matcher.git")
 
 (make-instance
  'git-repo
@@ -578,3 +579,38 @@
  'git-repo
  :name :cl-cairo2
  :url "git://github.com/tpapp/cl-cairo2.git")
+
+(make-instance
+ 'cvs-repo
+ :name :mcclim
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/mcclim/cvsroot"
+ :module "mcclim"
+ :additional-packages '(:clim-examples :clim-listener :clouseau)
+ )
+
+(make-instance
+ 'cvs-repo
+ :name :flexichain
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/flexichain/cvsroot"
+ :module "flexichain")
+
+(make-instance
+ 'darcs-repo
+ :name :spatial-trees
+ :url "http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees")
+
+(make-instance
+ 'darcs-repo
+ :name :clx
+ :url "http://common-lisp.net/~crhodes/clx")
+
+(make-instance
+ 'cvs-repo
+ :name :cl-prevalence
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-prevalence/cvsroot"
+ :module "cl-prevalence")
+
+(make-instance
+ 'darcs-repo
+ :name :s-sysdeps
+ :url "http://www.beta9.be/darcs/s-sysdeps")

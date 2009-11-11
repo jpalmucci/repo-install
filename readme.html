@@ -50,10 +50,16 @@
     <p> <a href="http://common-lisp.net/project/clbuild">Clbuild</a>
       is another common lisp package manager that works with
       downstream repositories as opposed to tarballs. I decided not to
-      use it because it was missing some functionality I needed
-      (ri:all-repo-status, ri:all-repo-local-changes and TODOs below).
-      I'm finding that this functionality is much easier to implement
-      in Common Lisp.
+      use it for a few reasons:
+      <ul>
+        <li> It was missing some functionality I needed
+          (ri:all-repo-status, ri:all-repo-local-changes and TODOs
+          below).  I'm finding that this functionality is much easier
+          to implement in Common Lisp.</li>
+        <li> My emacs environment is set up to handle more than just
+        common lisp. I wanted to have my package manager work within
+        my existing environment.</li>
+      </ul>
     </p>
     
     <h2>Installing</h2>
@@ -75,18 +81,20 @@
       <pre>(load "<i>&lt;location where you untarred&gt;</i>/repo-install/boot.lisp")</pre>
     </p>
 
-    <p>Repo-install takes the philosophy that the correct version
-      control system to use is the one the upstream library maintainer
-      is using. Therefore, you will
+    <p>Repo-install needs wget installed on your system to actually
+      move the bits to your machine. Also, we take the philosophy that
+      the correct version control system to use is the one the
+      upstream library maintainer is using. Therefore, you will
       need <a href="http://git-scm.com/">Git</a>, <a href="http://bazaar-vcs.org/">Bazaar</a>, <a href="http://subversion.tigris.org/">Subversion</a>,
       <a href="http://mercurial.selenic.com/wiki/">Mercurial</a>,
-      and <a href="http://darcs.net/">Darcs</a> installed on your
-      system. Using <a href="http://www.macports.org/">MacPorts</a> on
+      and <a href="http://darcs.net/">Darcs</a>
+      too. Using <a href="http://www.macports.org/">MacPorts</a> on
       OSX, do this:
+      
+      <pre>sudo port install git-core bzr subversion darcs mercurial wget</pre></p>
 
-      <pre>sudo port install git-core bzr subversion darcs mercurial</pre></p>
     <p>Under debian, do:
-      <pre>sudo apt-get install git-core bzr subversion darcs mercurial</pre></p>
+      <pre>sudo apt-get install git-core bzr subversion darcs mercurial wget</pre></p>
 
     <h2>How repo-install handles different upstream repositories</h2>
 
@@ -106,10 +114,9 @@
     tarball, and if one exists, update this repository.  Local patches
     are stored in a repository named "local" in the same
     directory. When the "upstream" repository is updated, repo-install
-    will pull the changes to the "local" repository in order to
-    integrate your patches. Patches can be submitted to the upstream
-    provider by diffing the "upstream" and "local" working
-    directories.</p>
+    will pull the changes to the "local", integrating your
+    patches. Patches can be submitted to the upstream provider by
+    diffing the "upstream" and "local" working directories.</p>
     
     <p>Finally, non-distributed version control systems simply check
     out the upstream library. Local patches are maintained in your
@@ -146,11 +153,16 @@
     
     <h2>Exported Functions</h2>
     <ul>
-      <li><b>(ri:install <i>library</i>)</b><p> Install the given library,
-	  possibly downloading it and any dependencies found in its asdf
-	  system definition. If a particular dependency is not found in
-	  the manifest signal an error. In this case,
-	  you'll have to add the library to the manifest and try again.</p></li>
+      <li><b>(ri:install <i>library</i>)</b> <em>DEPRECIATED</em> 
+	  Simply use asdf:load-system or asdf:load-op. Repo-install
+	  provides a hook to these functions to download and install
+	  any needed dependencies.
+        <p> Install the given library,
+	  possibly downloading it and any dependencies found in its
+	  asdf system definition. If a particular dependency is not
+	  found in the manifest signal an error. In this case, you'll
+	  have to add the library to the manifest and try
+	  again.</p></li>
       <li><b>(ri:find-repo <i>library</i>)</b><p>
 	  Find the repository for the given library.
       </p></li>
