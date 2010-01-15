@@ -15,6 +15,8 @@
    #:all-local-repo-changes
    #:is-managed
    #:all-managed-packages
+   #:show-detected-repos
+   #:add-detected-repos
    #:*current-manifest*)
 )
 
