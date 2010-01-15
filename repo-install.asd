@@ -13,6 +13,8 @@
    #:all-repo-status
    #:local-repo-changes
    #:all-local-repo-changes
+   #:is-managed
+   #:all-managed-packages
    #:*current-manifest*)
 )
 
@@ -21,5 +23,6 @@
   :components ((:file "utilities")
 	       (:file "vars")
 	       (:file "installer")
+	       (:file "detect")
 	       (:static-file "most-recent-manifest.lisp"))
   :serial t)
