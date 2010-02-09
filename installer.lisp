@@ -284,21 +284,24 @@ and try again."
 	  (t nil))))
 
 (defmethod update-repo ((p git-repo))
-  (test-environment :git)
-  (let* ((dir (database-dir p)))
-    (with-slots (url release) p
-      (cond ((not (probe-file (make-pathname :name ".git" :defaults dir)))
-	     (cl-fad:delete-directory-and-files dir :if-does-not-exist :ignore)
-	     ;; make sure that we don't leave around a partially created repo
-	     (delete-dir-on-error dir
-	       ;; darcs repo is not there yet, get it
-	       (safe-shell-command nil"git clone ~a ~a" url 
-				   (string-right-trim "/" (format nil "~A" dir)))))
-	    (t
-	     (let ((result (safe-shell-command nil "(cd ~a ; git pull)" dir)))
-	       (cond ((search "Already up-to-date." result)
-		      nil)
-		     (t result))))))))
+  (restart-bind
+      ((retry (lambda () (update-repo p))
+	 :report-function (lambda (s) (format s "Retry updating ~a." p))))
+    (test-environment :git)
+    (let* ((dir (database-dir p)))
+      (with-slots (url release) p
+	(cond ((not (probe-file (make-pathname :name ".git" :defaults dir)))
+	       (cl-fad:delete-directory-and-files dir :if-does-not-exist :ignore)
+	       ;; make sure that we don't leave around a partially created repo
+	       (delete-dir-on-error dir
+		 ;; repo is not there yet, get it
+		 (safe-shell-command nil"git clone ~a ~a" url 
+				     (string-right-trim "/" (format nil "~A" dir)))))
+	      (t
+	       (let ((result (safe-shell-command nil "(cd ~a ; git pull)" dir)))
+		 (cond ((search "Already up-to-date." result)
+			nil)
+		       (t result)))))))))
 
 ;; ********************************************************************************
 
@@ -413,25 +416,29 @@ and try again."
     result))
 
 
-(defun dump-message (package msg)
-  (princ "--------------------------------------------------------------------------------")
-  (terpri)
-  (format t "~A - ~A" (name package) (class-of package))
-  (terpri)
-  (princ "--------------------------------------------------------------------------------")
-  (terpri)
-  (princ msg)
+(defun dump-message (&key package message)
+  (when package
+    (princ "-------------------------------------------------------------------------------")
+    (terpri)
+    (format t "~A - ~A" (name package) (class-of package))
+    (terpri)
+    (princ "-------------------------------------------------------------------------------")
   (terpri))
+  (when message
+    (princ message)
+    (terpri))
+  (finish-output))
 
 (defun update-all-repos ()
   "Grab the most recent changes from the upstream repositories."
   (loop for package in (all-packages)
        do
        (cond ((probe-file (working-dir package))
+	      (dump-message :package package)
 	      (with-simple-restart (abort "Skip updating ~A" package)
-	      (let ((message (update-repo package)))
-		(if message
-		    (dump-message package message))))))))
+		(let ((message (update-repo package)))
+		  (if message
+		      (dump-message :message message))))))))
 
 (defun all-repo-status ()
   "For all repositories, print changes that have been made to the working 
@@ -441,7 +448,7 @@ directory, but have not yet been committed to the local repository."
        (let ((status (and (probe-file (working-dir package))
 			  (repo-status package))))
        (cond ((not (null status))
-	      (dump-message package status))))))
+	      (dump-message :package package :message status))))))
 
 (defun all-local-repo-changes ()
   "For all repositories, print changes that have been committed to the local
