@@ -603,3 +603,9 @@
  'darcs-repo
  :name :s-sysdeps
  :url "http://www.beta9.be/darcs/s-sysdeps")
+
+(make-instance
+ 'git-repo
+ :name :routes
+ :additional-packages '(:routes.unify :routes-test)
+ :url "git://github.com/archimag/cl-routes.git")
