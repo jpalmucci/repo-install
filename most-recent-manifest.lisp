@@ -614,3 +614,8 @@
  'darcs-repo
  :name :s-sysdeps
  :url "http://www.beta9.be/darcs/s-sysdeps")
+
+(make-instance
+ 'cliki-repo
+ :name :asdf-install
+ :strip-components 1)

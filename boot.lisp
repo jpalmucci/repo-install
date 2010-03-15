@@ -35,4 +35,5 @@
            (update-repo repo)))
     (asd-file repo :package-name system)))
 
-(pushnew 'asd-file-for-system asdf:*system-definition-search-functions*)
+(cond ((not (member 'asd-file-for-system asdf:*system-definition-search-functions*))
+       (setq asdf:*system-definition-search-functions* `(,@asdf:*system-definition-search-functions* asd-file-for-system))))
