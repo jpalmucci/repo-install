@@ -522,7 +522,7 @@
 (make-instance
  'darcs-repo
  :name :metacopy
- :url "http://www.common-lisp.net/project/cl-dwim/darcs/metacopy")
+ :url "http://common-lisp.net/project/metacopy/darcs/metacopy")
 
 (make-instance
  'darcs-repo
