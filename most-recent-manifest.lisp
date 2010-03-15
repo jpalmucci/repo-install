@@ -36,16 +36,46 @@
 
 (make-instance
  'darcs-repo
- :name :cl-fad
- :url "http://common-lisp.net/~loliveira/ediware/cl-fad")
+ :name :trivial-http
+ :url "http://common-lisp.net/project/trivial-http")
+
+;; add all darcs repos from http://common-lisp.net/~loliveira/ediware/
+(mapcar #'(lambda (name)
+	    (make-instance
+	     'darcs-repo
+	     :name name
+	     :url (concatenate 'string
+			       "http://common-lisp.net/~loliveira/ediware/"
+			       (string-downcase (string name)))))
+
+	'(:chunga
+	  :cl-fad
+	  :cl-gd
+	  :cl-interpol
+	  :cl-ppcre
+	  :cl-who
+	  :drakma
+	  :flexi-streams
+	  :html-template
+	  :hunchentoot
+	  :url-rewrite
+	  :cl-unicode
+	  :capi-overview
+	  :cl-dongle
+	  :cl-wbxml
+	  :documentation-template
+	  :fm-plugin-tools
+	  :html-extract
+	  :lw-add-ons
+	  :lw-doc
+	  :lw-win
+	  :midgets
+	  :odd-streams
+	  :rdnzl
+	  :regex-plugin
+	  :cl-webdav))
 
 (make-instance
- 'darcs-repo
- :name :trivial-http
- :url "http://common-lisp.net/project/trivial-http"
-)
-
-(make-instance 
  'darcs-repo
  :name :trivial-shell
  :url "http://common-lisp.net/project/trivial-shell")
@@ -59,6 +89,20 @@
  'cliki-repo
  :name :split-sequence
  :strip-components 1)
+
+;; forward declare the test package
+(defpackage cl-ppcre-test)
+(make-instance
+ 'darcs-repo
+ :name :cl-ppcre
+ :additional-packages '(:cl-ppcre-test)
+ :url "http://common-lisp.net/~loliveira/ediware/cl-ppcre"
+ #+ignore
+ :tester
+ #+ignore
+ #'(lambda ()
+	     (asdf:load-system :cl-ppcre-test)
+	     (cl-ppcre-test::test)))
 
 ;; packages ubove this point are required for repo-installer
 
@@ -91,15 +135,9 @@
 				   (asdf:oos 'asdf:test-op :alexandria-tests))))
 )
 
-(make-instance 
+(make-instance
  'cliki-repo
  :name :rt)
-
-(make-instance
- 'darcs-repo
- :name :trivial-features
- :url "http://common-lisp.net/~loliveira/darcs/trivial-features"
-)
 
 (make-instance
  'git-repo
@@ -112,26 +150,11 @@
  :strip-components 1)
 
 (make-instance
- 'darcs-repo
- :name :drakma
- :url "http://common-lisp.net/~loliveira/ediware/drakma")
-
-(make-instance
- 'darcs-repo
- :name :chunga
- :url "http://common-lisp.net/~loliveira/ediware/chunga")
-
-(make-instance
- 'darcs-repo
- :name :flexi-streams
- :url "http://common-lisp.net/~loliveira/ediware/flexi-streams")
-
-(make-instance 
  'cliki-repo
  :name :trivial-gray-streams
  :strip-components 1)
 
-(make-instance 
+(make-instance
  'cliki-repo
  :name :cl-base64
  :strip-components 1)
@@ -184,11 +207,6 @@
 
 (make-instance
  'darcs-repo
- :name :hunchentoot
- :url "http://common-lisp.net/~loliveira/ediware/hunchentoot")
-
-(make-instance
- 'darcs-repo
  :name :bordeaux-threads
  :url "http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads"
  :tester #'(lambda ()
@@ -198,29 +216,15 @@
 	     (return-lift-results
 	      (lift::run-tests :suite (lift::find-testsuite "TEST-BORDEAUX-THREADS")))))
 
-(make-instance 
+(make-instance
  'cliki-repo
  :name :rfc2388
  :strip-components 1)
 
-(make-instance 
+(make-instance
  'cliki-repo
  :name :md5
  :strip-components 1)
-
-;; forward declare the test package
-(defpackage cl-ppcre-test)
-(make-instance
- 'darcs-repo
- :name :cl-ppcre
- :additional-packages '(:cl-ppcre-test)
- :url "http://common-lisp.net/~loliveira/ediware/cl-ppcre"
- #+ignore
- :tester 
- #+ignore
- #'(lambda ()
-	     (asdf:load-system :cl-ppcre-test)
-	     (cl-ppcre-test::test)))
 
 (make-instance
  'darcs-repo
@@ -282,7 +286,7 @@
  :url "git://repo.or.cz/closure-common.git")
 
 
-(make-instance 
+(make-instance
  'darcs-repo
  :name :asdf-system-connections
  :url "http://common-lisp.net/project/asdf-system-connections")
@@ -292,17 +296,12 @@
  :name :moptilities
  :url "http://common-lisp.net/project/moptilities")
 
-(make-instance 
+(make-instance
  'darcs-repo
  :name :closer-mop
  :url "http://common-lisp.net/project/closer/repos/closer-mop")
 
-(make-instance 
- 'darcs-repo
- :name :trivial-garbage
- :url "http://common-lisp.net/~loliveira/darcs/trivial-garbage")
-
-(make-instance 
+(make-instance
  'darcs-repo
  :name :stefil
  :url "http://common-lisp.net/project/stefil/darcs/stefil")
@@ -349,33 +348,28 @@
  :name :fare-utils
  :url "http://common-lisp.net/r/users/frideau/fare-utils.git")
 
-(make-instance 
+(make-instance
  'darcs-repo
  :name :cl-json
  :url "http://common-lisp.net/project/cl-json/darcs/cl-json")
 
-(make-instance 
- 'darcs-repo
- :name :cl-who
- :url "http://common-lisp.net/~loliveira/ediware/cl-who")
-
-(make-instance 
+(make-instance
  'darcs-repo
  :name :postmodern
  :additional-packages '(:s-sql :cl-postgres)
  :url "http://common-lisp.net/project/postmodern/darcs/postmodern")
 
-(make-instance 
+(make-instance
  'darcs-repo
  :name :trivial-utf-8
  :url "http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8")
 
-(make-instance 
+(make-instance
  'darcs-repo
  :name :ieee-floats
  :url "http://common-lisp.net/project/ieee-floats/darcs/ieee-floats")
 
-(make-instance 
+(make-instance
  'git-repo
  :name :clsql
  :url "git://git.b9.com/clsql.git"
@@ -392,7 +386,7 @@
 			:clsql-uffi
 			))
 
-(make-instance 
+(make-instance
  'git-repo
  :name :uffi
  :url "git://git.b9.com/uffi.git")
@@ -415,7 +409,7 @@
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/s-xml/cvsroot"
  :module "s-xml")
 
-(make-instance 
+(make-instance
  'darcs-repo
  :name :trivial-timeout
  :url "http://common-lisp.net/project/trivial-timeout"
@@ -432,11 +426,6 @@
  :additional-packages '(:cl-twitter-db))
 
 (make-instance
- 'darcs-repo
- :name :cl-interpol
- :url "http://common-lisp.net/~loliveira/ediware/cl-interpol")
-
-(make-instance 
  'tarball-backed-bzr-repo
  :name :cl-unicode
  :url "http://weitz.de/files/cl-unicode.tar.gz"
@@ -448,18 +437,18 @@
  :url "http://www.common-lisp.net/project/elephant/darcs/elephant-1.0"
  :additional-packages '(:ele-bdb :ele-clp :ele-postmodern))
 
-(make-instance                                                                                                                                 
- 'cliki-repo                                                                                                                                   
+(make-instance
+ 'cliki-repo
  :name :pxmlutils
- :strip-components 1)                                                                                                                             
-                                                                                                                                               
-(make-instance                                                                                                                                 
- 'cvs-repo                                                                                                                                     
+ :strip-components 1)
+
+(make-instance
+ 'cvs-repo
  :name :portableaserve
  :cvsroot ":pserver:anonymous@portableaserve.cvs.sourceforge.net:/cvsroot/portableaserve"
  :module "portableaserve"
  :additional-packages '(:acl-compat))
-                                                   
+
 (make-instance
  'git-repo
  :name :cl-mysql
@@ -544,38 +533,38 @@
  :name :eager-future
  :url "http://common-lisp.net/project/eager-future/repository/eager-future")
 
-(make-instance 
+(make-instance
  'git-repo
  :name :closure-html
  :url "git://repo.or.cz/closure-html.git")
 
-(make-instance 
+(make-instance
  'cvs-repo
  :name :cl-plplot
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plplot/cvsroot"
  :module "cl-plplot")
 
-(make-instance 
+(make-instance
  'git-repo
  :name :cl-2d
  :url "git://github.com/tpapp/cl-2d.git")
 
-(make-instance 
+(make-instance
  'git-repo
  :name :cl-numlib
  :url "git://github.com/tpapp/cl-numlib.git")
 
-(make-instance 
+(make-instance
  'git-repo
  :name :array-operations
  :url "git://github.com/tpapp/array-operations.git")
 
-(make-instance 
+(make-instance
  'git-repo
  :name :cl-colors
  :url "git://github.com/tpapp/cl-colors.git")
 
-(make-instance 
+(make-instance
  'git-repo
  :name :cl-cairo2
  :url "git://github.com/tpapp/cl-cairo2.git")
@@ -614,6 +603,12 @@
  'darcs-repo
  :name :s-sysdeps
  :url "http://www.beta9.be/darcs/s-sysdeps")
+
+(make-instance
+ 'git-repo
+ :name :routes
+ :additional-packages '(:routes.unify :routes-test)
+ :url "git://github.com/archimag/cl-routes.git")
 
 (make-instance
  'cliki-repo
