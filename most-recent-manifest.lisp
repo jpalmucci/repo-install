@@ -614,3 +614,9 @@
  'cliki-repo
  :name :asdf-install
  :strip-components 1)
+
+(make-instance
+ 'cvs-repo
+ :name :swank
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot"
+ :module "slime")
