@@ -620,3 +620,8 @@
  :name :swank
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot"
  :module "slime")
+
+(make-instance
+ 'git-repo
+ :name :trivial-backtrace
+ :url "http://common-lisp.net/project/trivial-backtrace/trivial-backtrace.git")
