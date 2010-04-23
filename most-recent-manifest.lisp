@@ -625,3 +625,8 @@
  'git-repo
  :name :trivial-backtrace
  :url "http://common-lisp.net/project/trivial-backtrace/trivial-backtrace.git")
+
+(make-instance
+ 'darcs-repo
+ :name :trivial-features
+ :url "http://common-lisp.net/~loliveira/darcs/trivial-features")
