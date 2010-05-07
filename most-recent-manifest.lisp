@@ -630,3 +630,8 @@
  'darcs-repo
  :name :trivial-features
  :url "http://common-lisp.net/~loliveira/darcs/trivial-features")
+
+(make-instance
+ 'git-repo
+ :name :cl-uri-templates
+ :url "http://github.com/billitch/cl-uri-templates.git")
