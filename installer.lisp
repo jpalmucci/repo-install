@@ -164,7 +164,11 @@ and try again."
   )
   
 (defmethod update-repo ((s symbol))
-  (update-repo (find-repo s)))
+  (with-simple-restart (abort "Skip updating ~A" s)
+    (loop while
+	 (nth-value 2 (with-simple-restart (retry "Retry updating ~A" s)
+			(return-from update-repo
+			  (update-repo (find-repo s))))))))
 
 (defmethod update-repo ((p tarball-backed-bzr-repo))
   "update the local database from the cache."
@@ -431,13 +435,12 @@ and try again."
 
 (defun update-all-repos ()
   "Grab the most recent changes from the upstream repositories."
-  (loop for package in (all-packages)
-       do
-       (cond ((probe-file (working-dir package))
-	      (with-simple-restart (abort "Skip updating ~A" package)
-		(let ((message (update-repo package)))
-		  (if message
-		      (dump-message :message message))))))))
+  (maphash #'(lambda (key package)
+	       (cond ((probe-file (working-dir package))
+		      (let ((message (update-repo key)))
+			(if message
+			    (dump-message :message message))))))
+	   *all-packages*))
 
 (defun all-repo-status ()
   "For all repositories, print changes that have been made to the working 
