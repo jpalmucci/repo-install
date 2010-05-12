@@ -76,9 +76,9 @@
 	  :cl-webdav))
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :trivial-shell
- :url "http://common-lisp.net/project/trivial-shell")
+ :url "git://github.com/gwkkwg/trivial-shell")
 
 (make-instance
  'svn-repo
