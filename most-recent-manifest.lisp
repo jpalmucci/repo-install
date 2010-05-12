@@ -181,9 +181,9 @@
  :url "http://git.debian.org/git/pkg-common-lisp/cl-rsm-string.git")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :lift
- :url "http://common-lisp.net/project/lift")
+ :url "git://github.com/gwkkwg/lift")
 
 (make-instance
  'git-repo
