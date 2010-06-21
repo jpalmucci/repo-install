@@ -206,9 +206,9 @@
  :url "http://common-lisp.net/project/metabang-bind")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :bordeaux-threads
- :url "http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads"
+ :url "git://common-lisp.net/projects/bordeaux-threads/bordeaux-threads.git"
  :tester #'(lambda ()
 	     (load (make-pathname :directory `(,@(butlast (pathname-directory *current-manifest*)) "bordeaux-threads")
 		   :name "bordeaux-threads-test"
