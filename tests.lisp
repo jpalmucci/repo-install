@@ -7,7 +7,7 @@
      (ntests :initform nil)
      (test-output :initform nil))
 )
-     
+
 (defmethod test-package ((r base-repo))
   (let ((result (make-instance 'test-results :repo r)))
     (with-slots (loaded load-output nfailed ntests test-output) result
@@ -32,10 +32,10 @@
 		 (setf test-output output))))
 	result))))
 
-	  
+
 
 (defun test-all-repos (&optional (only-installed t))
-  "For all repositories, print changes that have been made to the working 
+  "For all repositories, print changes that have been made to the working
 directory, but have not yet been committed to the local repository."
   (cond ((not only-installed)
 	 (loop for package in (all-packages)
@@ -52,7 +52,7 @@ directory, but have not yet been committed to the local repository."
     (multiple-value-bind (match submatch)
 	(cl-ppcre:scan-to-strings (cl-ppcre:create-scanner "([0-9]+) out of ([0-9]+) total tests failed") (get-output-stream-string *standard-output*))
       (values (get-output-stream-string *standard-output*)
-	      (parse-integer (aref submatch 0)) 
+	      (parse-integer (aref submatch 0))
 	      (parse-integer (aref submatch 1))))))
 
 (defun parse-stefil-results (fn)
@@ -60,11 +60,11 @@ directory, but have not yet been committed to the local repository."
     (ignore-errors
       (funcall fn))
     (multiple-value-bind (match submatch)
-	(cl-ppcre:scan-to-strings (cl-ppcre:create-scanner 
+	(cl-ppcre:scan-to-strings (cl-ppcre:create-scanner
 				   "([0-9]+) tests, [0-9]+ assertions, ([0-9]+) failures")
 				  (get-output-stream-string *standard-output*))
       (values (get-output-stream-string *standard-output*)
-	      (parse-integer (aref submatch 0)) 
+	      (parse-integer (aref submatch 0))
 	      (parse-integer (aref submatch 1))))))
 
 (defun return-lift-results (r)

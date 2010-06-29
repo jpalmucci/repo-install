@@ -10,7 +10,7 @@
 
 ;; windows doen't support symbolic links, so we don't use them in repo-install
 ;; Set up the central registry temporarily so we can bootstrap repo-install
-(let ((asdf:*central-registry* 
+(let ((asdf:*central-registry*
        (append asdf:*central-registry*
 		(mapcar #'(lambda (subdir)
 			    (make-pathname :directory (append (butlast (pathname-directory *load-truename*))
@@ -21,7 +21,7 @@
 
 (load (merge-pathnames (make-pathname :name "most-recent-manifest" :type "lisp") *load-truename*))
 
-(in-package :ri) 
+(in-package :ri)
 
 ;; tell asdf how to load repo-install packages
 (defun asd-file-for-system (system)

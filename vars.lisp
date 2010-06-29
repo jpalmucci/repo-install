@@ -1,6 +1,6 @@
 (in-package :ri)
 
-(defparameter *installer-directory* 
+(defparameter *installer-directory*
   (parent-directory *load-truename*)
   "where new packages are stored (siblings to this directory)")
 
