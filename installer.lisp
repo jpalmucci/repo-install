@@ -437,6 +437,8 @@ and try again."
   "Grab the most recent changes from the upstream repositories."
   (maphash #'(lambda (key package)
 	       (cond ((probe-file (working-dir package))
+		      (dump-message :package package
+				    :message "checking for updates")
 		      (let ((message (update-repo key)))
 			(if message
 			    (dump-message :message message))))))
