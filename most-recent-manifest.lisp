@@ -217,9 +217,10 @@
 	      (lift::run-tests :suite (lift::find-testsuite "TEST-BORDEAUX-THREADS")))))
 
 (make-instance
- 'cliki-repo
+ 'cvs-repo
  :name :rfc2388
- :strip-components 1)
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/rfc2388/cvsroot"
+ :module "rfc2388")
 
 (make-instance
  'cliki-repo
