@@ -495,8 +495,9 @@
  :url "http://common-lisp.net/project/local-time/darcs/local-time")
 
 (make-instance
- 'cliki-repo
- :name :ironclad)
+ 'git-repo
+ :name :ironclad
+ :url "git://github.com/froydnj/ironclad.git")
 
 (make-instance
  'darcs-repo
