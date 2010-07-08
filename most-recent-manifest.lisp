@@ -166,6 +166,18 @@
  :module "cl+ssl")
 
 (make-instance
+ 'cvs-repo
+ :name :trivial-gray-streams
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plus-ssl/cvsroot"
+ :module "trivial-gray-streams")
+
+(make-instance
+ 'cvs-repo
+ :name :trivial-https
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plus-ssl/cvsroot"
+ :module "trivial-https")
+
+(make-instance
  'git-repo
  :name :puri
  :url "git://git.b9.com/puri.git")
