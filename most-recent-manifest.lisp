@@ -260,6 +260,12 @@
  :url "http://common-lisp.net/project/asdf-binary-locations")
 
 (make-instance
+ 'cvs-repo
+ :name :cl-smtp
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot"
+ :module "cl-smtp")
+
+(make-instance
  'darcs-repo
  :name :cl-store
  :url "http://common-lisp.net/project/cl-store/darcs/cl-store")
