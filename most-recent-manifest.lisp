@@ -554,11 +554,6 @@
  :url "http://common-lisp.net/project/eager-future/repository/eager-future")
 
 (make-instance
- 'git-repo
- :name :closure-html
- :url "git://repo.or.cz/closure-html.git")
-
-(make-instance
  'cvs-repo
  :name :cl-plplot
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plplot/cvsroot"
@@ -602,6 +597,12 @@
  :name :flexichain
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/flexichain/cvsroot"
  :module "flexichain")
+
+(make-instance
+ 'cvs-repo
+ :name :climacs
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/climacs/cvsroot"
+ :module "climacs")
 
 (make-instance
  'darcs-repo
@@ -655,3 +656,8 @@
  'git-repo
  :name :cl-uri-templates
  :url "http://github.com/billitch/cl-uri-templates.git")
+
+(make-instance
+ 'git-repo
+ :name :stumpwm
+ :url "git://git.savannah.nongnu.org/stumpwm.git")
