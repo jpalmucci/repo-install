@@ -296,6 +296,25 @@
 
 (make-instance
  'git-repo
+ :name :cxml-stp
+ :url "http://www.lichteblau.com/git/cxml-stp.git")
+
+(make-instance
+ 'darcs-repo
+ :name :xpath
+ :url "http://common-lisp.net/project/plexippus-xpath/darcs/plexippus-xpath/")
+
+(make-instance
+ 'darcs-repo
+ :name :yacc
+ :url "http://www.pps.jussieu.fr/~jch/software/repos/cl-yacc")
+
+(make-instance
+ 'cliki-repo
+ :name :parse-number)
+
+(make-instance
+ 'git-repo
  :name :closure-html
  :url "git://repo.or.cz/closure-html.git")
 
