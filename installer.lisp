@@ -192,7 +192,7 @@ and try again."
 		 (makedirs upstream)
 		 (concatenate
 		  'string
-		  (safe-shell-command nil "(cd ~a && tar xvf ~a ~a && bzr init)"
+		  (safe-shell-command nil "(cd ~a && tar xzf ~a ~a && bzr init)"
 				      upstream tarball-path
 				      (if strip-components
 					  (format nil "--strip-components ~d" strip-components) ""))
