@@ -1,7 +1,7 @@
 (in-package :ri)
 
 (defun test-environment (repo-type)
-  (ecase repo-type 
+  (ecase repo-type
     (:wget
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which wget")
@@ -32,14 +32,14 @@
 	 (safe-shell-command t "which bzr")
        (if (not (eql code 0))
 	   (error "bzr executable not found. Please install the Bazaar version control system and try again."))))))
-	  
+
 (defun install (package &key (force nil))
   "Install the given package, possibly downloading it and any
 dependencies found in its asdf system definition. If a particular
 dependency is not found in the manifest, *current-manifest*, signal an
 error. In this case, you'll have to add the package to the manifest
 and try again."
-  (if force 
+  (if force
       (update-repo (find-repo package)))
   (handler-case
       (asdf:operate 'asdf:load-op package)
@@ -48,7 +48,7 @@ and try again."
 	(cond ((null repo)
 	       (error "Don't know how to get the ~a package.~&Please add the missing package to the manifest ~A." (asdf::missing-requires c) *current-manifest*))
 	      ((probe-file (working-dir repo))
-	       (error "Repository for ~A exists, but asdf could not load it." 
+	       (error "Repository for ~A exists, but asdf could not load it."
 		      (string-downcase package))))
 	(format t "Downloading package ~A~%"
 		(asdf::missing-requires c))
@@ -65,9 +65,9 @@ and try again."
                         defsystem in whose asd file the defsystem is
                         defined. (common in cases where system
                         includes plugins)")
-   (tester :initarg :tester :initform nil 
+   (tester :initarg :tester :initform nil
 	   :documentation "A funcallable object that will test the library. Returns true on success."))
-  
+
   (:documentation "Base class for any distribution package")
   )
 
@@ -76,7 +76,7 @@ and try again."
     (ignore-errors
       (prin1 (name o) stream))))
 
-(defmethod initialize-instance :after ((p base-repo) &key &allow-other-keys) 
+(defmethod initialize-instance :after ((p base-repo) &key &allow-other-keys)
   (with-slots (name additional-packages) p
     (loop for package in (cons name additional-packages)
 	 do
@@ -101,15 +101,15 @@ and try again."
   (cond ((probe-file (working-dir p))
 	 (with-slots (name) p
 	   (let ((name-to-look-for (string-downcase (symbol-name (or package-name name)))))
-	     (cl-fad:walk-directory 
-	      (working-dir p) 
+	     (cl-fad:walk-directory
+	      (working-dir p)
 	      #'(lambda (x)
 		  (cond ((and (equalp (string-downcase (pathname-type x)) "asd")
 			      (equalp (string-downcase (pathname-name x)) name-to-look-for)
 			      (or (null test)
 				  (funcall test x)))
 			 (return-from asd-file x)))))))))
-  
+
   nil)
 
 (defclass tarball-backed-bzr-repo (base-repo)
@@ -135,7 +135,7 @@ and try again."
 		   (database-dir p)))
 
 (defmethod asd-file ((p tarball-backed-bzr-repo) &key (package-name nil))
-  (call-next-method p :package-name package-name 
+  (call-next-method p :package-name package-name
 		    :test #'(lambda (x)
 			      (not (member ".bzr" (pathname-directory x) :test #'equalp)))))
 
@@ -149,7 +149,7 @@ and try again."
 (defmethod local-repo-changes ((p tarball-backed-bzr-repo))
   (multiple-value-bind (result code)
       (safe-shell-command t "(cd ~a ; bzr missing)" (working-dir p))
-    (if (eql code 0) 
+    (if (eql code 0)
 	nil
 	result)))
 
@@ -162,15 +162,19 @@ and try again."
 	    (delete-file file)))
   (safe-shell-command nil (format nil "(cd ~a ; tar xzf ~a ~a ; bzr commit --unchanged -m 'new tarball received')" bzr-working-dir tarball tar-options))
   )
-  
+
 (defmethod update-repo ((s symbol))
-  (update-repo (find-repo s)))
+  (with-simple-restart (abort "Skip updating ~A" s)
+    (loop while
+	 (nth-value 2 (with-simple-restart (retry "Retry updating ~A" s)
+			(return-from update-repo
+			  (update-repo (find-repo s))))))))
 
 (defmethod update-repo ((p tarball-backed-bzr-repo))
   "update the local database from the cache."
   (test-environment :bzr)
   (test-environment :wget)
-	   
+
   (let* ((dir (database-dir p))
 	 (upstream (merge-pathnames "upstream" dir)))
     (with-slots (url strip-components) p
@@ -187,12 +191,12 @@ and try again."
 		 ;; first time we grabbed a tarball, build the local repository
 		 (makedirs upstream)
 		 (concatenate
-		  'string 
+		  'string
 		  (safe-shell-command nil "(cd ~a ; tar xvf ~a ~a ; bzr init)"
 				      upstream tarball-path
 				      (if strip-components
 					  (format nil "--strip-components ~d" strip-components) ""))
-	 
+
 		  (safe-shell-command nil "(cd ~a ; bzr add . ; bzr commit -m 'initial tarball' ; cd .. ; bzr branch upstream local)" (upstream-dir p))
 		  ;; if the default .bzrignore file is not there, add it
 		  (let ((bzrpath  (make-pathname :name ".bzrignore" :defaults (working-dir p))))
@@ -227,7 +231,7 @@ and try again."
   )
 
 (defmethod asd-file ((p darcs-repo) &key (package-name nil))
-  (call-next-method p :package-name package-name 
+  (call-next-method p :package-name package-name
 		    :test #'(lambda (x)
 			      (not (member "_darcs" (pathname-directory x) :test #'equalp)))))
 
@@ -267,7 +271,7 @@ and try again."
   )
 
 (defmethod asd-file ((p git-repo) &key (package-name nil))
-  (call-next-method p :package-name package-name 
+  (call-next-method p :package-name package-name
 		    :test #'(lambda (x)
 			      (not (member ".git" (pathname-directory x) :test #'equalp)))))
 
@@ -295,7 +299,7 @@ and try again."
 	       ;; make sure that we don't leave around a partially created repo
 	       (delete-dir-on-error dir
 		 ;; repo is not there yet, get it
-		 (safe-shell-command nil"git clone ~a ~a" url 
+		 (safe-shell-command nil"git clone ~a ~a" url
 				     (string-right-trim "/" (format nil "~A" dir)))))
 	      (t
 	       (let ((result (safe-shell-command nil "(cd ~a ; git pull)" dir)))
@@ -310,7 +314,7 @@ and try again."
   )
 
 (defmethod asd-file ((p mercurial-repo) &key (package-name nil))
-  (call-next-method p :package-name package-name 
+  (call-next-method p :package-name package-name
 		    :test #'(lambda (x)
 			      (not (member ".hg" (pathname-directory x) :test #'equalp)))))
 
@@ -335,7 +339,7 @@ and try again."
 	     ;; make sure that we don't leave around a partially created repo
 	     (delete-dir-on-error dir
 	       ;; repo is not there yet, get it
-	       (safe-shell-command nil "hg clone ~a ~a" url 
+	       (safe-shell-command nil "hg clone ~a ~a" url
 				   (string-right-trim "/" (format nil "~A" dir)))))
 	    (t
 	     (let ((result (safe-shell-command nil "(cd ~a ; hg pull ; hg update)" dir)))
@@ -350,7 +354,7 @@ and try again."
   )
 
 (defmethod asd-file ((p svn-repo) &key (package-name nil))
-  (call-next-method p :package-name package-name 
+  (call-next-method p :package-name package-name
 		    :test #'(lambda (x)
 			      (not (member ".svn" (pathname-directory x) :test #'equalp)))))
 
@@ -389,7 +393,7 @@ and try again."
   (let ((result (safe-shell-command t "(cd ~a ; cvs diff --brief)" (working-dir p))))
     (cond ((search "differ" result)
 	   result)
-	  (t 
+	  (t
 	   nil))))
 
 (defmethod local-repo-changes ((p cvs-repo))
@@ -431,16 +435,17 @@ and try again."
 
 (defun update-all-repos ()
   "Grab the most recent changes from the upstream repositories."
-  (loop for package in (all-packages)
-       do
-       (cond ((probe-file (working-dir package))
-	      (with-simple-restart (abort "Skip updating ~A" package)
-		(let ((message (update-repo package)))
-		  (if message
-		      (dump-message :message message))))))))
+  (maphash #'(lambda (key package)
+	       (cond ((probe-file (working-dir package))
+		      (dump-message :package package
+				    :message "checking for updates")
+		      (let ((message (update-repo key)))
+			(if message
+			    (dump-message :message message))))))
+	   *all-packages*))
 
 (defun all-repo-status ()
-  "For all repositories, print changes that have been made to the working 
+  "For all repositories, print changes that have been made to the working
 directory, but have not yet been committed to the local repository."
   (loop for package in (all-packages)
        do
@@ -458,4 +463,3 @@ repository, but have not yet been committed upstream"
 			  (local-repo-changes package))))
        (cond ((not (null status))
 	      (dump-message package status))))))
-  

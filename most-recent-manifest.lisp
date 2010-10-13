@@ -76,9 +76,9 @@
 	  :cl-webdav))
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :trivial-shell
- :url "http://common-lisp.net/project/trivial-shell")
+ :url "git://github.com/gwkkwg/trivial-shell")
 
 (make-instance
  'svn-repo
@@ -166,6 +166,18 @@
  :module "cl+ssl")
 
 (make-instance
+ 'cvs-repo
+ :name :trivial-gray-streams
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plus-ssl/cvsroot"
+ :module "trivial-gray-streams")
+
+(make-instance
+ 'cvs-repo
+ :name :trivial-https
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plus-ssl/cvsroot"
+ :module "trivial-https")
+
+(make-instance
  'git-repo
  :name :puri
  :url "git://git.b9.com/puri.git")
@@ -181,9 +193,9 @@
  :url "http://git.debian.org/git/pkg-common-lisp/cl-rsm-string.git")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :lift
- :url "http://common-lisp.net/project/lift")
+ :url "git://github.com/gwkkwg/lift")
 
 (make-instance
  'git-repo
@@ -206,9 +218,9 @@
  :url "http://common-lisp.net/project/metabang-bind")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :bordeaux-threads
- :url "http://common-lisp.net/project/bordeaux-threads/darcs/bordeaux-threads"
+ :url "git://common-lisp.net/projects/bordeaux-threads/bordeaux-threads.git"
  :tester #'(lambda ()
 	     (load (make-pathname :directory `(,@(butlast (pathname-directory *current-manifest*)) "bordeaux-threads")
 		   :name "bordeaux-threads-test"
@@ -217,9 +229,10 @@
 	      (lift::run-tests :suite (lift::find-testsuite "TEST-BORDEAUX-THREADS")))))
 
 (make-instance
- 'cliki-repo
+ 'cvs-repo
  :name :rfc2388
- :strip-components 1)
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/rfc2388/cvsroot"
+ :module "rfc2388")
 
 (make-instance
  'cliki-repo
@@ -245,6 +258,12 @@
  'darcs-repo
  :name :asdf-binary-locations
  :url "http://common-lisp.net/project/asdf-binary-locations")
+
+(make-instance
+ 'cvs-repo
+ :name :cl-smtp
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot"
+ :module "cl-smtp")
 
 (make-instance
  'darcs-repo
@@ -495,8 +514,9 @@
  :url "http://common-lisp.net/project/local-time/darcs/local-time")
 
 (make-instance
- 'cliki-repo
- :name :ironclad)
+ 'git-repo
+ :name :ironclad
+ :url "git://github.com/froydnj/ironclad.git")
 
 (make-instance
  'darcs-repo
@@ -532,11 +552,6 @@
  'darcs-repo
  :name :eager-future
  :url "http://common-lisp.net/project/eager-future/repository/eager-future")
-
-(make-instance
- 'git-repo
- :name :closure-html
- :url "git://repo.or.cz/closure-html.git")
 
 (make-instance
  'cvs-repo
@@ -584,6 +599,12 @@
  :module "flexichain")
 
 (make-instance
+ 'cvs-repo
+ :name :climacs
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/climacs/cvsroot"
+ :module "climacs")
+
+(make-instance
  'darcs-repo
  :name :spatial-trees
  :url "http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees")
@@ -614,3 +635,29 @@
  'cliki-repo
  :name :asdf-install
  :strip-components 1)
+
+(make-instance
+ 'cvs-repo
+ :name :swank
+ :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot"
+ :module "slime")
+
+(make-instance
+ 'git-repo
+ :name :trivial-backtrace
+ :url "http://common-lisp.net/project/trivial-backtrace/trivial-backtrace.git")
+
+(make-instance
+ 'darcs-repo
+ :name :trivial-features
+ :url "http://common-lisp.net/~loliveira/darcs/trivial-features")
+
+(make-instance
+ 'git-repo
+ :name :cl-uri-templates
+ :url "http://github.com/billitch/cl-uri-templates.git")
+
+(make-instance
+ 'git-repo
+ :name :stumpwm
+ :url "git://git.savannah.nongnu.org/stumpwm.git")

@@ -21,7 +21,7 @@
       create a local DVC repository with the non-DVC distribution system
       (tarballs, cvs, or svn) as input to the local repository.</p>
 
-    <p>There are two primary advantages to this: 
+    <p>There are two primary advantages to this:
       <ul>
 	<li>Changes you make to your local copy of the library remain
 	  in place even when you update to a newer version of the
@@ -61,7 +61,7 @@
         my existing environment.</li>
       </ul>
     </p>
-    
+
     <h2>Installing</h2>
 
     <p>Repo-install is bootstrapped using a tarball that can be found
@@ -90,7 +90,7 @@
       and <a href="http://darcs.net/">Darcs</a>
       too. Using <a href="http://www.macports.org/">MacPorts</a> on
       OSX, do this:
-      
+
       <pre>sudo port install git-core bzr subversion darcs mercurial wget</pre></p>
 
     <p>Under debian, do:
@@ -117,13 +117,13 @@
     will pull the changes to the "local", integrating your
     patches. Patches can be submitted to the upstream provider by
     diffing the "upstream" and "local" working directories.</p>
-    
+
     <p>Finally, non-distributed version control systems simply check
     out the upstream library. Local patches are maintained in your
     local working directory. Patches can be submitted to the upstream
     provider by getting write access to the repository, or by using
     the version control system's "diff" command.</p>
-    
+
     <h2>The Manifest</h2>
     <p>Repo-install gets library download locations from a lisp file
     that we call the manifest. Currently, there is only one manifest
@@ -149,11 +149,11 @@
     <p>You can look in most-recent-manifest.lisp for examples of each of these classes.</p>
 
     <p>Feel free to add any libraries that you may need to this file and submit a patch.</p>
-      
-    
+
+
     <h2>Exported Functions</h2>
     <ul>
-      <li><b>(ri:install <i>library</i>)</b> <em>DEPRECIATED</em> 
+      <li><b>(ri:install <i>library</i>)</b> <em>DEPRECIATED</em>
 	  Simply use asdf:load-system or asdf:load-op. Repo-install
 	  provides a hook to these functions to download and install
 	  any needed dependencies.
@@ -168,8 +168,8 @@
       </p></li>
       <li><b>(ri:update-repo <i>repo</i>)</b><p> Download any
 	  changes from the upstream repository. For distributed
-	  version control systems, this is equivalent to a pull. 
-	  <p>Non-distributed version control systems perform an update. Repo-install The strategy 
+	  version control systems, this is equivalent to a pull.
+	  <p>Non-distributed version control systems perform an update. Repo-install The strategy
       </p></li>
       <li><b>(ri:update-all-repos)</b><p>
 	  Update all repos that have ever been downloaded on this machine.
@@ -207,6 +207,6 @@
       <li>Code to automatically submit patches.</li>
       <li>Able to specify a tag or a branch on the upstream repository</li>
       <li>Make it easy to publish your local patches to others.</li>
-    </ul> 
+    </ul>
   </body>
 </html>
