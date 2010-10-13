@@ -1,7 +1,7 @@
 (in-package :ri)
 
 (defparameter *installer-directory* 
-  (parent-directory *load-truename*)
+  #.(parent-directory (or *compile-file-truename* *load-truename*))
   "where new packages are stored (siblings to this directory)")
 
 (defvar *all-packages* (make-hash-table)
