@@ -5,8 +5,10 @@
 #+sbcl
 (require :asdf)
 
-(load (merge-pathnames (make-pathname :directory '(:relative ".." "asdf") :name "asdf")
-		       *load-truename*))
+(unless (fboundp 'asdf::module-provide-asdf)
+  (load (merge-pathnames (make-pathname :directory '(:relative ".." "asdf") :name "asdf")
+                         *load-truename*)))
+
 
 ;; windows doen't support symbolic links, so we don't use them in repo-install
 ;; Set up the central registry temporarily so we can bootstrap repo-install
@@ -35,5 +37,4 @@
            (update-repo repo)))
     (asd-file repo :package-name system)))
 
-(cond ((not (member 'asd-file-for-system asdf:*system-definition-search-functions*))
-       (setq asdf:*system-definition-search-functions* `(,@asdf:*system-definition-search-functions* asd-file-for-system))))
+(pushnew 'asd-file-for-system asdf:*system-definition-search-functions*)
