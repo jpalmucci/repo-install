@@ -160,7 +160,7 @@ and try again."
      do (if (cl-fad:directory-pathname-p file)
 	    (cl-fad:delete-directory-and-files file)
 	    (delete-file file)))
-  (safe-shell-command nil (format nil "(cd ~a && tar xzf ~a ~a && bzr commit --unchanged -m 'new tarball received')" bzr-working-dir tarball tar-options))
+  (safe-shell-command nil (format nil "(cd ~a && tar ~a xzf ~a && bzr commit --unchanged -m 'new tarball received')" bzr-working-dir tar-options tarball))
   )
 
 (defmethod update-repo ((s symbol))
@@ -192,10 +192,11 @@ and try again."
 		 (makedirs upstream)
 		 (concatenate
 		  'string
-		  (safe-shell-command nil "(cd ~a && tar xzf ~a ~a && bzr init)"
-				      upstream tarball-path
-				      (if strip-components
-					  (format nil "--strip-components ~d" strip-components) ""))
+		  (safe-shell-command nil "(cd ~a && tar ~a xzf ~a && bzr init)"
+				      upstream
+				      (when strip-components
+					(format nil "--strip-components ~d" strip-components) "")
+				      tarball-path)
 
 		  (safe-shell-command nil "(cd ~a && bzr add . && bzr commit -m 'initial tarball' && cd .. && bzr branch upstream local)" (upstream-dir p))
 		  ;; if the default .bzrignore file is not there, add it
