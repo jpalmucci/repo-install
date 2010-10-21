@@ -464,12 +464,6 @@
  :additional-packages '(:cl-twitter-db))
 
 (make-instance
- 'tarball-backed-bzr-repo
- :name :cl-unicode
- :url "http://weitz.de/files/cl-unicode.tar.gz"
- :strip-components 1)
-
-(make-instance
  'darcs-repo
  :name :elephant
  :url "http://www.common-lisp.net/project/elephant/darcs/elephant-1.0"
