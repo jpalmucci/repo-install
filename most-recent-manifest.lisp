@@ -296,6 +296,25 @@
 
 (make-instance
  'git-repo
+ :name :cxml-stp
+ :url "http://www.lichteblau.com/git/cxml-stp.git")
+
+(make-instance
+ 'darcs-repo
+ :name :xpath
+ :url "http://common-lisp.net/project/plexippus-xpath/darcs/plexippus-xpath/")
+
+(make-instance
+ 'darcs-repo
+ :name :yacc
+ :url "http://www.pps.jussieu.fr/~jch/software/repos/cl-yacc")
+
+(make-instance
+ 'cliki-repo
+ :name :parse-number)
+
+(make-instance
+ 'git-repo
  :name :closure-html
  :url "git://repo.or.cz/closure-html.git")
 
@@ -443,12 +462,6 @@
  :name :cl-twitter
  :url "http://www.common-lisp.net/project/cl-twitter/darcs/cl-twitter"
  :additional-packages '(:cl-twitter-db))
-
-(make-instance
- 'tarball-backed-bzr-repo
- :name :cl-unicode
- :url "http://weitz.de/files/cl-unicode.tar.gz"
- :strip-components 1)
 
 (make-instance
  'darcs-repo
