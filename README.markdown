@@ -166,30 +166,31 @@ Exported Functions
 library.
 
 * `(ri:update-repo <repoi>)` Download any changes from the upstream
-         repository. For distributed version control systems, this is
-         equivalent to a pull.  Non-distributed version control
-         systems perform an update.
+    repository. For distributed version control systems, this is
+    equivalent to a pull.  Non-distributed version control
+    systems perform an update.
 
-* `(ri:update-all-repos)` Update all repos that have ever been downloaded on this machine.
+* `(ri:update-all-repos)` Update all repos that have ever been
+    downloaded on this machine.
 
 * `(ri:repos-status <repo>)` Return a string describing any changes
-	  made to the local working directory that are not yet checked
-	  in. If repo-install can *reliably* detect that no changes
-	  have been made, return nil.
+    made to the local working directory that are not yet checked
+    in. If repo-install can *reliably* detect that no changes
+    have been made, return nil.
 
 * `(ri:all-repo-status)` Run repo-status on all locally installed
-	  libraries. Print out descriptions of those that have
-	  uncommitted changes.
+    libraries. Print out descriptions of those that have
+    uncommitted changes.
 
 * `(ri:local-repo-changes <repo>)` Return a string describing any
-	  changes made to the local repository that are not yet
-	  checked in to the upstream repository. If repo-install
-	  can <em>reliably</em> detect that no changes have been made,
-	  return nil.
+    changes made to the local repository that are not yet
+    checked in to the upstream repository. If repo-install
+    can <em>reliably</em> detect that no changes have been made,
+    return nil.
 
 * `(ri:all-local-repo-changes)` Run local-repo-changes on all locally
-	  installed libraries. Print out descriptions of those that
-	  have uncommitted changes.
+    installed libraries. Print out descriptions of those that
+    have uncommitted changes.
 
 Patches and Issues
 ------------------
