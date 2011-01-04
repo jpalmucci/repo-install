@@ -19,7 +19,7 @@
 							      (list subdir))
 					   :device (pathname-device *load-truename*)))
 			'("repo-install" "cl-fad" "trivial-shell" "cl-ppcre")))))
-  (asdf:load-system :repo-install))
+  (asdf:operate 'asdf:load-op :repo-install))
 
 (load (merge-pathnames (make-pathname :name "most-recent-manifest" :type "lisp") *load-truename*))
 
