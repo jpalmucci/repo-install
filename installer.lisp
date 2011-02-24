@@ -153,14 +153,14 @@ and try again."
 	nil
 	result)))
 
-(defun replace-bzr-contents (bzr-working-dir tarball &optional (tar-options ""))
+(defun replace-bzr-contents (bzr-working-dir tarball &optional tar-options)
   "replace the contents of the bzr working directory with the tarball and commit any changes"
   (loop for file in (cl-fad:list-directory bzr-working-dir)
        when (not (equal (pathname-name (cl-fad:pathname-as-file file)) ".bzr"))
      do (if (cl-fad:directory-pathname-p file)
 	    (cl-fad:delete-directory-and-files file)
 	    (delete-file file)))
-  (safe-shell-command nil (format nil "(cd ~a && tar ~a xzf ~a && bzr commit --unchanged -m 'new tarball received')" bzr-working-dir tar-options tarball))
+  (safe-shell-command nil (format nil "(cd ~a && tar ~a xzf ~a && bzr commit --unchanged -m 'new tarball received')" bzr-working-dir (or tar-options "") tarball))
   )
 
 (defmethod update-repo ((s symbol))
