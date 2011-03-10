@@ -100,16 +100,16 @@ and try again."
 (defmethod asd-file ((p base-repo) &key (package-name nil) (test nil))
   (cond ((probe-file (working-dir p))
 	 (with-slots (name) p
-	   (let ((name-to-look-for (string-downcase (symbol-name (or package-name name)))))
+	   (let ((name-to-look-for (symbol-name (or package-name name))))
 	     (cl-fad:walk-directory
 	      (working-dir p)
 	      #'(lambda (x)
-		  (cond ((and (equalp (string-downcase (pathname-type x)) "asd")
-			      (equalp (string-downcase (pathname-name x)) name-to-look-for)
+		  (cond ((and (or (string-equal (pathname-type x) "asd")
+				  (string-equal (pathname-type x) "asdf"))
+			      (string-equal (pathname-name x) name-to-look-for)
 			      (or (null test)
 				  (funcall test x)))
 			 (return-from asd-file x)))))))))
-
   nil)
 
 (defclass tarball-backed-bzr-repo (base-repo)
