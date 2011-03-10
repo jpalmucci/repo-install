@@ -712,3 +712,7 @@
  'git-repo
  :name :bencode
  :url "git://github.com/nja/cl-bencode.git")
+
+(make-instance
+ 'cliki-repo
+ :name :cl-log)
