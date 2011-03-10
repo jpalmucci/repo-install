@@ -192,10 +192,8 @@ and try again."
 		 (makedirs upstream)
 		 (concatenate
 		  'string
-		  (safe-shell-command nil "(cd ~a && tar ~a xzf ~a && bzr init)"
+		  (safe-shell-command nil "(cd ~a && tar xzf ~a && bzr init)"
 				      upstream
-				      (when strip-components
-					(format nil "--strip-components ~d" strip-components) "")
 				      tarball-path)
 
 		  (safe-shell-command nil "(cd ~a && bzr add . && bzr commit -m 'initial tarball' && cd .. && bzr branch upstream local)" (upstream-dir p))
