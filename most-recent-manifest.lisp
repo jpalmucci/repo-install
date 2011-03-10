@@ -107,11 +107,10 @@
 ;; packages ubove this point are required for repo-installer
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :cffi
  :additional-packages '(:cffi-grovel)
- :url "http://common-lisp.net/project/cffi/darcs/cffi"
-)
+ :url "http://common-lisp.net/r/projects/cffi/cffi.git")
 
 (make-instance
  'darcs-repo
@@ -147,11 +146,6 @@
 (make-instance
  'cliki-repo
  :name :cl-utilities
- :strip-components 1)
-
-(make-instance
- 'cliki-repo
- :name :trivial-gray-streams
  :strip-components 1)
 
 (make-instance
@@ -264,6 +258,15 @@
  :name :cl-smtp
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot"
  :module "cl-smtp")
+
+(make-instance
+ 'cliki-repo
+ :name :cl-qprint)
+
+(make-instance
+ 'darcs-repo
+ :name :trivial-email-utf-8
+ :url "http://common-lisp.net/project/bpm/darcs/trivial-email-utf-8")
 
 (make-instance
  'darcs-repo
@@ -390,6 +393,11 @@
  'darcs-repo
  :name :cl-json
  :url "http://common-lisp.net/project/cl-json/darcs/cl-json")
+
+(make-instance
+ 'git-repo
+ :name :parse-js
+ :url "http://marijnhaverbeke.nl/git/parse-js")
 
 (make-instance
  'darcs-repo
@@ -666,6 +674,11 @@
  :url "http://common-lisp.net/~loliveira/darcs/trivial-features")
 
 (make-instance
+ 'darcs-repo
+ :name :trivial-garbage
+ :url "http://common-lisp.net/~loliveira/darcs/trivial-garbage")
+
+(make-instance
  'git-repo
  :name :cl-uri-templates
  :url "http://github.com/billitch/cl-uri-templates.git")
@@ -674,3 +687,28 @@
  'git-repo
  :name :stumpwm
  :url "git://git.savannah.nongnu.org/stumpwm.git")
+
+(make-instance
+ 'git-repo
+ :name :libfixposix
+ :url "git://gitorious.org/libfixposix/libfixposix.git")
+
+(make-instance
+ 'git-repo
+ :name :iolib
+ :additional-packages '(:iolib-grovel
+			:iolib.base
+			:iolib.multiplex
+			:iolib.os
+			:iolib.pathnames
+			:iolib.sockets
+			:iolib.streams
+			:iolib.syscalls
+			:iolib.trivial-sockets
+			:libfixposix)
+ :url "git://gitorious.org/iolib/iolib.git")
+
+(make-instance
+ 'git-repo
+ :name :bencode
+ :url "git://github.com/nja/cl-bencode.git")
