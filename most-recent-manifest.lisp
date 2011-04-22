@@ -727,3 +727,8 @@
  'git-repo
  :name :xml-plist-emitter
  :url "git@github.com:billitch/xml-plist-emitter.git")
+
+(make-instance
+ 'git-repo
+ :name :sb-fastcgi
+ :url "https://github.com/KDr2/sb-fastcgi.git")
