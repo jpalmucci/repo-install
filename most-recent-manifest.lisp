@@ -716,3 +716,8 @@
 (make-instance
  'cliki-repo
  :name :cl-log)
+
+(make-instance
+ 'git-repo
+ :name :lowh-facts
+ :url "git@github.com:billitch/lowh-facts.git")
