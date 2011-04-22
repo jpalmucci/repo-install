@@ -716,6 +716,11 @@
 
 (make-instance
  'git-repo
+ :name :lessp
+ :url "git@github.com:billitch/lessp.git")
+
+(make-instance
+ 'git-repo
  :name :lowh-facts
  :url "git@github.com:billitch/lowh-facts.git")
 
