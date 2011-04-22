@@ -721,3 +721,12 @@
  'git-repo
  :name :lowh-facts
  :url "git@github.com:billitch/lowh-facts.git")
+
+(make-instance
+ 'cliki-repo
+ :name :xml-emitter)
+
+(make-instance
+ 'git-repo
+ :name :xml-plist-emitter
+ :url "git@github.com:billitch/xml-plist-emitter.git")
