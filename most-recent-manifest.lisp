@@ -21,13 +21,10 @@
  :name :repo-install
  :url "git://github.com/jpalmucci/repo-install.git")
 
-;; this work word as a repo because there is no asd file
-#+ignore
 (make-instance
  'git-repo
  :name :asdf
- :url "http://common-lisp.net/project/asdf/asdf.git"
-)
+ :url "http://common-lisp.net/project/asdf/asdf.git")
 
 (make-instance
  'git-repo
