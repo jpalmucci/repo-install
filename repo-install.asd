@@ -5,6 +5,7 @@
   (:use :cl)
   (:export
    #:install
+   #:with-repo-install
    #:find-repo
    #:update-repo
    #:test-all-repos

@@ -30,31 +30,45 @@
     (:bzr
      (multiple-value-bind (result code)
 	 (safe-shell-command t "which bzr")
+       (declare (ignore result))
        (if (not (eql code 0))
 	   (error "bzr executable not found. Please install the Bazaar version control system and try again."))))))
 
+(defmacro with-repo-install (&body body)
+  "
+Run BODY (possibly multiple times) and install missing packages until
+successful. If a particular dependency is not found in the
+*current-manifest*, signal an error. In this case, you'll have to add
+the package to the manifest and try again.
+"
+  (let ((c (gensym "C-"))
+	(tag (gensym "TAG-")))
+    `(tagbody
+	,tag
+	(handler-bind ((asdf:missing-component (lambda (,c)
+						 (handle-missing-component ,c)
+						 (go ,tag))))
+	  ,@body))))
+
+(defun handle-missing-component (c)
+  (let ((repo (find-repo (asdf::missing-requires c))))
+    (cond ((null repo)
+	   (error "Don't know how to get the ~a package.~&Please add the missing package to the manifest ~A." (asdf::missing-requires c) *current-manifest*))
+	  ((probe-file (working-dir repo))
+	   (error "Repository for ~A exists, but asdf could not load it."
+		  (string-downcase (name repo)))))
+    (format t "Downloading package ~A~%" (asdf::missing-requires c))
+    (install (asdf::missing-requires c) :force t)))
+
 (defun install (package &key (force nil))
-  "Install the given package, possibly downloading it and any
-dependencies found in its asdf system definition. If a particular
-dependency is not found in the manifest, *current-manifest*, signal an
-error. In this case, you'll have to add the package to the manifest
-and try again."
+  "
+Ensure the given package and its dependencies are installed.
+Use FORCE to fetch/update even if the package is installed.
+"
   (if force
       (update-repo (find-repo package)))
-  (handler-case
-      (asdf:operate 'asdf:load-op package)
-    (asdf:missing-component (c)
-      (let ((repo (find-repo (asdf::missing-requires c))))
-	(cond ((null repo)
-	       (error "Don't know how to get the ~a package.~&Please add the missing package to the manifest ~A." (asdf::missing-requires c) *current-manifest*))
-	      ((probe-file (working-dir repo))
-	       (error "Repository for ~A exists, but asdf could not load it."
-		      (string-downcase package))))
-	(format t "Downloading package ~A~%"
-		(asdf::missing-requires c))
-	(update-repo repo)
-	(install (asdf::missing-requires c))
-	(install package)))))
+  (with-repo-install
+    (asdf:operate 'asdf:load-op package)))
 
 (defclass base-repo ()
   ((name :initarg :name :reader name)
@@ -173,7 +187,7 @@ and try again."
 (defmethod update-repo ((p tarball-backed-bzr-repo))
   "update the local database from the cache."
   (test-environment :bzr)
-  (test-environment :wget)
+  #-openbsd (test-environment :wget)
 
   (let* ((dir (database-dir p))
 	 (upstream (merge-pathnames "upstream" dir)))
@@ -182,7 +196,8 @@ and try again."
       (let ((tarball-path (merge-pathnames (format nil "tarballs/~a" (get-universal-time))
 					   (database-dir p)))
 	    (prev-tarballs (sort (mapcar #'(lambda (x) (parse-integer (pathname-name x))) (cl-fad:list-directory (merge-pathnames "tarballs/" (database-dir p)))) #'>)))
-	(safe-shell-command t "wget ~a -O ~a" url tarball-path)
+	#+openbsd (safe-shell-command t "ftp -o ~A ~A" tarball-path url)
+	#-openbsd (safe-shell-command t "wget ~a -O ~a" url tarball-path)
 	(cond ((not (probe-file tarball-path))
 	       (error "Couldn't download tarball"))
 	      ((eql (length prev-tarballs) 0)
