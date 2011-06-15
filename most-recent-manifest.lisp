@@ -32,9 +32,9 @@
  :url "http://common-lisp.net/project/osicat/git/osicat.git")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :trivial-http
- :url "http://common-lisp.net/project/trivial-http")
+ :url "git://github.com/gwkkwg/trivial-http")
 
 ;; add all darcs repos from http://common-lisp.net/~loliveira/ediware/
 (mapcar #'(lambda (name)
@@ -725,8 +725,9 @@
  :url "git@github.com:billitch/lowh-facts.git")
 
 (make-instance
- 'cliki-repo
- :name :xml-emitter)
+ 'git-repo
+ :name :xml-emitter
+ :url "git@github.com:billitch/xml-emitter.git")
 
 (make-instance
  'git-repo
