@@ -737,4 +737,9 @@
 (make-instance
  'git-repo
  :name :sb-fastcgi
- :url "https://github.com/KDr2/sb-fastcgi.git")
+ :url "git@github.com:KDr2/sb-fastcgi.git")
+
+(make-instance
+ 'git-repo
+ :name :idna
+ :url "git://github.com/antifuchs/idna.git")
