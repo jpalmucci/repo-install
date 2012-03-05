@@ -1,14 +1,11 @@
 
-;; load the old version of asdf so we won't get an undefined function error
-;; when sbcl tries to use ASDF::MODULE-PROVIDE-ASDF, which doesn't seem to be
-;; in the newest release of asdf
-#+sbcl
-(require :asdf)
+;; load a known good version of asdf
+(load (merge-pathnames (make-pathname :directory '(:relative ".." "asdf") :name "asdf")
+                         *load-truename*))
 
-(unless (fboundp 'asdf::module-provide-asdf)
-  (load (merge-pathnames (make-pathname :directory '(:relative ".." "asdf") :name "asdf")
-                         *load-truename*)))
-
+;; clear output translations in case repo-install was already loaded in the world under a different username
+;; (the output translations differ by user)
+(asdf:clear-output-translations)
 
 ;; windows doen't support symbolic links, so we don't use them in repo-install
 ;; Set up the central registry temporarily so we can bootstrap repo-install
