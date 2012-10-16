@@ -112,24 +112,22 @@
 (make-instance
  'git-repo
  :name :babel
- :url "https://github.com/cl-babel/babel.git"
+ :url "git://github.com/cl-babel/babel.git"
  :additional-packages '(:babel-tests)
  :tester (lambda ()
 	   (ri:install :babel-tests)
 	   (parse-stefil-results (lambda ()
-				   (asdf:oos 'asdf:test-op :babel-tests))))
-)
+				   (asdf:oos 'asdf:test-op :babel-tests)))))
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :alexandria
- :url "http://common-lisp.net/project/alexandria/darcs/alexandria"
+ :url "git://common-lisp.net/projects/alexandria/alexandria.git"
  :additional-packages '(:alexandria-tests)
- :tester #'(lambda ()
-	     (ri:install  :alexandria-tests)
-	     (parse-rt-results #'(lambda ()
-				   (asdf:oos 'asdf:test-op :alexandria-tests))))
-)
+ :tester (lambda ()
+	   (ri:install :alexandria-tests)
+	   (parse-rt-results (lambda ()
+			       (asdf:oos 'asdf:test-op :alexandria-tests)))))
 
 (make-instance
  'cliki-repo
@@ -716,6 +714,11 @@
 
 (make-instance
  'git-repo
+ :name :com.informatimago.common-lisp.llrbtree
+ :url "http://github.com/billitch/com.informatimago.common-lisp.llrbtree.git")
+
+(make-instance
+ 'git-repo
  :name :lessp
  :url "git@github.com:billitch/lessp.git")
 
@@ -723,6 +726,11 @@
  'git-repo
  :name :lowh-facts
  :url "git@github.com:billitch/lowh-facts.git")
+
+(make-instance
+ 'git-repo
+ :name :http-pool
+ :url "git://github.com/billitch/http-pool.git")
 
 (make-instance
  'git-repo
@@ -743,6 +751,16 @@
  'git-repo
  :name :idna
  :url "git://github.com/antifuchs/idna.git")
+
+(make-instance
+ 'git-repo
+ :name :cl-ffmpeg
+ :url "git://github.com/sykopomp/cl-ffmpeg.git")
+
+(make-instance
+ 'git-repo
+ :name :cl-uglify-js
+ :url "git://github.com/mishoo/cl-uglify-js.git")
 
 (make-instance
  'darcs-repo
