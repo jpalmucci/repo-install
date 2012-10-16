@@ -110,13 +110,13 @@
  :url "http://common-lisp.net/r/projects/cffi/cffi.git")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :babel
- :url "http://common-lisp.net/project/babel/darcs/babel"
+ :url "https://github.com/cl-babel/babel.git"
  :additional-packages '(:babel-tests)
- :tester #'(lambda ()
-	     (ri:install :babel-tests)
-	     (parse-stefil-results #'(lambda ()
+ :tester (lambda ()
+	   (ri:install :babel-tests)
+	   (parse-stefil-results (lambda ()
 				   (asdf:oos 'asdf:test-op :babel-tests))))
 )
 
@@ -171,7 +171,7 @@
 (make-instance
  'git-repo
  :name :puri
- :url "git://git.b9.com/puri.git")
+ :url "git://github.com/lisp/com.b9.puri.ppcre.git")
 
 (make-instance
  'git-repo
@@ -305,9 +305,9 @@
  :url "http://common-lisp.net/project/plexippus-xpath/darcs/plexippus-xpath/")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :yacc
- :url "http://www.pps.jussieu.fr/~jch/software/repos/cl-yacc")
+ :url "git://git.wifi.pps.jussieu.fr/cl-yacc")
 
 (make-instance
  'cliki-repo
@@ -743,3 +743,18 @@
  'git-repo
  :name :idna
  :url "git://github.com/antifuchs/idna.git")
+
+(make-instance
+ 'darcs-repo
+ :name :cl-uri
+ :url "http://common-lisp.net/project/cl-uri/darcs/cl-uri/")
+
+(make-instance
+ 'git-repo
+ :name :cl-mime
+ :url "git://github.com/billitch/cl-mime.git")
+
+(make-instance
+ 'git-repo
+ :name :cl-ffmpeg
+ :url "git://github.com/sykopomp/cl-ffmpeg.git")
