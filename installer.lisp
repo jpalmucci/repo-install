@@ -174,8 +174,9 @@ Use FORCE to fetch/update even if the package is installed.
      do (if (cl-fad:directory-pathname-p file)
 	    (cl-fad:delete-directory-and-files file)
 	    (delete-file file)))
-  (safe-shell-command nil (format nil "(cd ~a && tar ~a xzf ~a && bzr commit --unchanged -m 'new tarball received')" bzr-working-dir (or tar-options "") tarball))
-  )
+  (safe-shell-command nil (format nil "(cd ~a && ~a xzf ~a ~@[~a ~]&& bzr commit --unchanged -m 'new tarball received')"
+				  bzr-working-dir
+				  *tar-command* tarball tar-options)))
 
 (defmethod update-repo ((s symbol))
   (with-simple-restart (abort "Skip updating ~A" s)
@@ -184,11 +185,15 @@ Use FORCE to fetch/update even if the package is installed.
 			(return-from update-repo
 			  (update-repo (find-repo s))))))))
 
+(defun download (url path)
+  #-openbsd (test-environment :wget)
+  (dump-message :message (format nil "Downloading ~A into ~A" url path))
+  #+openbsd (safe-shell-command t "ftp -o ~A ~A" path url)
+  #-openbsd (safe-shell-command t "wget ~a -O ~a" url path))
+
 (defmethod update-repo ((p tarball-backed-bzr-repo))
   "update the local database from the cache."
   (test-environment :bzr)
-  #-openbsd (test-environment :wget)
-
   (let* ((dir (database-dir p))
 	 (upstream (merge-pathnames "upstream" dir)))
     (with-slots (url strip-components) p
@@ -196,8 +201,7 @@ Use FORCE to fetch/update even if the package is installed.
       (let ((tarball-path (merge-pathnames (format nil "tarballs/~a" (get-universal-time))
 					   (database-dir p)))
 	    (prev-tarballs (sort (mapcar #'(lambda (x) (parse-integer (pathname-name x))) (cl-fad:list-directory (merge-pathnames "tarballs/" (database-dir p)))) #'>)))
-	#+openbsd (safe-shell-command t "ftp -o ~A ~A" tarball-path url)
-	#-openbsd (safe-shell-command t "wget ~a -O ~a" url tarball-path)
+	(download url tarball-path)
 	(cond ((not (probe-file tarball-path))
 	       (error "Couldn't download tarball"))
 	      ((eql (length prev-tarballs) 0)
@@ -207,8 +211,9 @@ Use FORCE to fetch/update even if the package is installed.
 		 (makedirs upstream)
 		 (concatenate
 		  'string
-		  (safe-shell-command nil "(cd ~a && tar xzf ~a && bzr init)"
+		  (safe-shell-command nil "(cd ~a && ~a xzf ~a && bzr init)"
 				      upstream
+				      *tar-command*
 				      tarball-path)
 
 		  (safe-shell-command nil "(cd ~a && bzr add . && bzr commit -m 'initial tarball' && cd .. && bzr branch upstream local)" (upstream-dir p))
@@ -238,7 +243,7 @@ Use FORCE to fetch/update even if the package is installed.
 
 (defmethod initialize-instance :after ((p cliki-repo) &key &allow-other-keys)
   (with-slots (name url) p
-    (setf url (concatenate 'string "http://www.cliki.net/" (string-downcase name) "?DOWNLOAD"))))
+    (setf url (concatenate 'string "http://www.cliki.net/" (string-downcase name) "?download"))))
 
 (defclass darcs-repo (base-repo)
   ((url :initarg :url))
@@ -436,13 +441,15 @@ Use FORCE to fetch/update even if the package is installed.
 
 (defun dump-message (&key package message)
   (when package
+    (fresh-line)
     (princ "-------------------------------------------------------------------------------")
     (terpri)
     (format t "~A - ~A" (name package) (class-of package))
     (terpri)
     (princ "-------------------------------------------------------------------------------")
-  (terpri))
+    (terpri))
   (when message
+    (fresh-line)
     (princ message)
     (terpri))
   (finish-output))
