@@ -58,6 +58,7 @@ the package to the manifest and try again.
 	   (error "Repository for ~A exists, but asdf could not load it."
 		  (string-downcase (name repo)))))
     (format t "Downloading package ~A~%" (asdf::missing-requires c))
+    (force-output)
     (install (asdf::missing-requires c) :force t)))
 
 (defun install (package &key (force nil))
