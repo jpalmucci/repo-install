@@ -796,3 +796,8 @@
  'git-repo
  :name :rollback
  :url "https://github.com/billitch/rollback.git")
+
+(make-instance
+ 'git-repo
+ :name :nibbles
+ :url "https://github.com/froydnj/nibbles.git")
