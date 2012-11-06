@@ -92,7 +92,7 @@
 (make-instance
  'darcs-repo
  :name :cl-ppcre
- :additional-packages '(:cl-ppcre-test)
+ :additional-packages '(:cl-ppcre-test :cl-ppcre-unicode)
  :url "http://common-lisp.net/~loliveira/ediware/cl-ppcre"
  #+ignore
  :tester
