@@ -776,3 +776,23 @@
  'git-repo
  :name :cl-ffmpeg
  :url "git://github.com/sykopomp/cl-ffmpeg.git")
+
+(make-instance
+ 'git-repo
+ :name :external-program
+ :url "git://github.com/sellout/external-program.git")
+
+(make-instance
+ 'git-repo
+ :name :exec-js
+ :url "git://github.com/billitch/exec-js.git")
+
+(make-instance
+ 'git-repo
+ :name :cl-skip-list
+ :url "git://github.com/kraison/cl-skip-list.git")
+
+(make-instance
+ 'git-repo
+ :name :rollback
+ :url "https://github.com/billitch/rollback.git")
