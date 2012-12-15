@@ -149,10 +149,9 @@
  :strip-components 1)
 
 (make-instance
- 'cvs-repo
+ 'git-repo
  :name :cl+ssl
- :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plus-ssl/cvsroot"
- :module "cl+ssl")
+ :url "https://git.gitorious.org/cl-plus-ssl/cl-plus-ssl.git")
 
 (make-instance
  'cvs-repo
