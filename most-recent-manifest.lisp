@@ -107,7 +107,7 @@
  'git-repo
  :name :cffi
  :additional-packages '(:cffi-grovel)
- :url "http://common-lisp.net/r/projects/cffi/cffi.git")
+ :url "https://github.com/cffi/cffi.git")
 
 (make-instance
  'git-repo
@@ -801,3 +801,8 @@
  'git-repo
  :name :nibbles
  :url "https://github.com/froydnj/nibbles.git")
+
+(make-instance
+ 'git-repo
+ :name :clws
+ :url "https://github.com/3b/clws.git")
