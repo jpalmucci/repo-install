@@ -72,6 +72,11 @@
 	  :regex-plugin
 	  :cl-webdav))
 
+(make-instance 
+ 'git-repo
+ :name :stdutils
+ :url "https://github.com/eslick/cl-stdutils.git")
+
 (make-instance
  'git-repo
  :name :trivial-shell
@@ -130,10 +135,6 @@
 			       (asdf:oos 'asdf:test-op :alexandria-tests)))))
 
 (make-instance
- 'cliki-repo
- :name :rt)
-
-(make-instance
  'git-repo
  :name :gsll
  :url "git://repo.or.cz/gsll.git")
@@ -143,6 +144,8 @@
  :name :cl-utilities
  :strip-components 1)
 
+;; obsolete
+#+ignore
 (make-instance
  'cliki-repo
  :name :cl-base64
@@ -154,10 +157,9 @@
  :url "https://git.gitorious.org/cl-plus-ssl/cl-plus-ssl.git")
 
 (make-instance
- 'cvs-repo
+ 'git-repo
  :name :trivial-gray-streams
- :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plus-ssl/cvsroot"
- :module "trivial-gray-streams")
+ :url "git://gitorious.org/trivial-gray-streams/trivial-gray-streams.git")
 
 (make-instance
  'cvs-repo
@@ -216,6 +218,8 @@
 	     (return-lift-results
 	      (lift::run-tests :suite (lift::find-testsuite "TEST-BORDEAUX-THREADS")))))
 
+;; obsolete
+#+ignore
 (make-instance
  'cvs-repo
  :name :rfc2388
@@ -307,8 +311,9 @@
  :url "git://git.wifi.pps.jussieu.fr/cl-yacc")
 
 (make-instance
- 'cliki-repo
- :name :parse-number)
+ 'git-repo
+ :name :parse-number
+ :url "https://github.com/sharplispers/parse-number")
 
 (make-instance
  'git-repo
@@ -409,6 +414,8 @@
  :name :ieee-floats
  :url "http://common-lisp.net/project/ieee-floats/darcs/ieee-floats")
 
+;; clsql website seems to be dead
+#+ignore
 (make-instance
  'git-repo
  :name :clsql
@@ -426,6 +433,8 @@
 			:clsql-uffi
 			))
 
+;; superceded by cffi (which has a uffi compatibility layer)
+#+ignore
 (make-instance
  'git-repo
  :name :uffi
@@ -472,11 +481,6 @@
  :additional-packages '(:ele-bdb :ele-clp :ele-postmodern))
 
 (make-instance
- 'cliki-repo
- :name :pxmlutils
- :strip-components 1)
-
-(make-instance
  'cvs-repo
  :name :portableaserve
  :cvsroot ":pserver:anonymous@portableaserve.cvs.sourceforge.net:/cvsroot/portableaserve"
@@ -486,22 +490,12 @@
 (make-instance
  'git-repo
  :name :cl-mysql
- :url "http://www.hackinghat.com/repositories/cl-mysql.git/")
+ :url "git://github.com/hackinghat/cl-mysql.git")
 
 (make-instance
  'darcs-repo
  :name :cl-perec
  :url "http://common-lisp.net/project/cl-perec/darcs/cl-perec")
-
-(make-instance
- 'darcs-repo
- :name :cl-rdbms
- :url "http://common-lisp.net/project/cl-rdbms/darcs/cl-rdbms"
- :additional-packages '((:cl-rdbms.oracle :cl-rdbms)
-                        (:cl-rdbms.postgresql :cl-rdbms)
-                        (:cl-rdbms.postmodern :cl-rdbms)
-                        (:cl-rdbms.sqlite :cl-rdbms)
-                        (:cl-rdbms-test :cl-rdbms)))
 
 (make-instance
  'darcs-repo
@@ -561,7 +555,7 @@
 (make-instance
  'darcs-repo
  :name :computed-class
- :url "http://www.common-lisp.net/project/computed-class/darcs/computed-class")
+ :url "http://dwim.hu/live/hu.dwim.computed-class")
 
 (make-instance
  'darcs-repo
@@ -574,15 +568,12 @@
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/cl-plplot/cvsroot"
  :module "cl-plplot")
 
+;; obsolete
+#+ignore
 (make-instance
  'git-repo
  :name :cl-2d
  :url "git://github.com/tpapp/cl-2d.git")
-
-(make-instance
- 'git-repo
- :name :cl-numlib
- :url "git://github.com/tpapp/cl-numlib.git")
 
 (make-instance
  'git-repo
@@ -597,7 +588,7 @@
 (make-instance
  'git-repo
  :name :cl-cairo2
- :url "git://github.com/tpapp/cl-cairo2.git")
+ :url "git://github.com/rpav/cl-cairo2.git")
 
 (make-instance
  'cvs-repo
@@ -620,9 +611,9 @@
  :module "climacs")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :spatial-trees
- :url "http://rvw.doc.gold.ac.uk/sullivan/darcs/spatial-trees")
+ :url "https://github.com/rpav/spatial-trees")
 
 (make-instance
  'darcs-repo
@@ -647,11 +638,6 @@
  :url "git://github.com/archimag/cl-routes.git")
 
 (make-instance
- 'cliki-repo
- :name :asdf-install
- :strip-components 1)
-
-(make-instance
  'cvs-repo
  :name :swank
  :cvsroot ":pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot"
@@ -663,14 +649,14 @@
  :url "http://common-lisp.net/project/trivial-backtrace/trivial-backtrace.git")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :trivial-features
- :url "http://common-lisp.net/~loliveira/darcs/trivial-features")
+ :url "http://github.com/trivial-features/trivial-features")
 
 (make-instance
- 'darcs-repo
+ 'git-repo
  :name :trivial-garbage
- :url "http://common-lisp.net/~loliveira/darcs/trivial-garbage")
+ :url "https://github.com/trivial-garbage/trivial-garbage.git")
 
 (make-instance
  'git-repo
@@ -805,3 +791,9 @@
  'git-repo
  :name :clws
  :url "https://github.com/3b/clws.git")
+
+(make-instance
+ 'darcs-repo
+ :name :chtml-matcher
+ :url "http://www.common-lisp.net/project/chtml-matcher/darcs/chtml-matcher")
+

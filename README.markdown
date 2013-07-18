@@ -6,7 +6,7 @@ Repo-install: An ASDF-install replacement geared towards collaboration
 
 Repo-install is a common lisp package manager that can be used to
 chase down and download dependencies between common lisp
-libraries. Unlike other package managers (asdf-install, mudballs),
+libraries. Unlike [Quicklisp](http://www.quicklisp.org),
 repo-install maintains the connection between source code on your disk
 and the upstream repository.
 
@@ -42,26 +42,15 @@ Finally, common-lisp users tend to be very technical. With such an
 experienced user base, downstream patches should turn out to be more
 valuable than not.
 
-Why not clbuild?
-----------------
-
-[Clbuild](http://common-lisp.net/project/clbuild) is another common
-lisp package manager that works with downstream repositories as
-opposed to tarballs. I decided not to use it for a few reasons:
-
-* It was missing some functionality I needed (ri:all-repo-status,
-  ri:all-repo-local-changes and TODOs below).  I'm finding that this
-  functionality is much easier to implement in Common Lisp.
-
-* My emacs environment is set up to handle more than just common
-  lisp. I wanted to have my package manager work within my existing
-  environment.
+If you don't plan on submitting patches to the upstream libraries or
+need to maintain local patches, go ahead and use
+[Quicklisp](http://www.quicklisp.org) instead.
 
 Installing
 ----------
 
 Repo-install is bootstrapped using a tarball that can be found
-[here](http://www.machineinsight.com/repo-install/repo-install-bootstrap.tgz).
+[here](https://www.dropbox.com/s/b9un3tj10bvpwsc/repo-install-bootstrap.tgz).
 The tarball contains the minimum set of libraries needed to get
 repo-install working. The bootstrap libraries (like all repo-install
 libraries) are actually software repositories. Patches to these
