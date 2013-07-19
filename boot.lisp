@@ -1,6 +1,8 @@
 
 ;; load a known good version of asdf
-(require "asdf")
+(load (merge-pathnames (make-pathname :directory '(:relative ".." "asdf" "build") :name "asdf")
+                       *load-truename*))
+
 
 ;; clear output translations in case repo-install was already loaded in the world under a different username
 ;; (the output translations differ by user)
@@ -34,3 +36,6 @@
     (asd-file repo :package-name system)))
 
 (pushnew 'asd-file-for-system asdf:*system-definition-search-functions*)
+
+;; now, reload asdf properly
+(asdf:load-system :asdf)

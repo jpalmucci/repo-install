@@ -24,6 +24,7 @@
 (make-instance
  'git-repo
  :name :asdf
+ :additional-packages '(:uiop)
  :url "http://common-lisp.net/project/asdf/asdf.git")
 
 (make-instance

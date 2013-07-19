@@ -9,6 +9,7 @@ cd .. || exit 1
 
 sudo tar -c --exclude '*~' --exclude '*.fasl' --exclude '*.dx64fsl' -zvf ~/Dropbox/repo-install-bootstrap.tgz \
     repo-install/repo-install  \
+    repo-install/asdf  \
     repo-install/trivial-shell \
     repo-install/cl-ppcre  \
     repo-install/cl-fad  || exit 1
