@@ -1,9 +1,10 @@
 
 ;; load a known good version of asdf
-(load (merge-pathnames (make-pathname :directory '(:relative ".." "asdf" "build") :name "asdf")
-                       *load-truename*))
-
-
+;; (require :asdf)
+(if (not (member :asdf3 *features*))
+    (load (merge-pathnames 
+           (make-pathname :directory '(:relative ".." "asdf" "build") :name "asdf" :type "lisp")
+           *load-truename*)))
 ;; clear output translations in case repo-install was already loaded in the world under a different username
 ;; (the output translations differ by user)
 (asdf:clear-output-translations)
